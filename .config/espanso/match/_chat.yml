@@ -1,0 +1,9 @@
+
+# Espanso matches that are useful in chat apps.
+
+matches:
+
+  - trigger: "blah"
+    replace: "blahblahblah"
+    word: true
+    propagate_case: false

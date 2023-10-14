@@ -1,0 +1,63 @@
+# Set custom shell aliases for BASH & ZSH
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Better defaults with added verbosity
+alias cls='clear';
+alias grep='grep -i --color=auto';
+alias ip='ip -color=auto';
+alias l='ls -lAFh --color=always --group-directories-first';
+alias ls='ls -AFh --color=always --group-directories-first';
+alias lsblk='lsblk -e7 -p -o NAME,SIZE,VENDOR,MODEL,SERIAL,LABEL,MOUNTPOINT,TYPE,FSTYPE';
+alias mkdir='mkdir -pv'; # create intermediate directories as needed
+alias mv='mv -iv';
+alias rm='rm -v';
+alias cp='cp -v';
+alias ln='ln -v';
+
+alias cd..='cd ..';
+alias ..='cd ..';
+alias ....='cd ../..';
+alias ......='cd ../../..';
+alias ........='cd ../../../..';
+alias ..........='cd ../../../../..';
+
+# Better `tree` with color, shows hidden files, ignores the `.git` directory and lists directories first.
+# The output gets piped into `less` with options to preserve color and line numbers, unless it fits in one screen.
+alias tre='tree -aC -I '.git' --dirsfirst "$@" | less -FRNX';
+
+# Open current folder in the default files app
+# TODO: make it work on WSL as well using Windows File Explorer
+alias nnn='xdg-open "$PWD"';
+
+# Show all saved WiFi Keys
+# TODO: make it work on WSL as well using netsh - possibly convert it to a script
+alias shwifi="sudo grep -r '^psk=' /etc/NetworkManager/system-connections/";
+
+# Show the name of the current shell
+alias which_shell="echo $(ps -p $$ -ocomm=)";
+
+# Reload the current shell (https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#how-do-i-reload-the-zshrc-file)
+alias rerc='exec "$(ps -p $$ -ocomm=)"';
+
+# Switch Python between python2 & python3
+alias switchpython='sudo update-alternatives --config python'
+
+# Fix Snap store
+alias fixsnap='sudo killall -s KILL snap-store && sudo snap refresh';
+
+# Show system information
+alias sysinfo='sudo inxi -v 3';
+
+# Git	
+alias g="git"	
+alias gco='(git branch --all && git tag) | fzf | xargs git checkout'; # fuzzy git checkout branch/tag
+alias ga='git diff --name-only --line-prefix=`git rev-parse --show-toplevel`/ | fzf | xargs git add -v'; # fuzzy git add
+
+# Open ToDo list in the default $EDITOR
+alias todo='"$EDITOR" "$DOTFILE_DIR/../../../../Notes/todo.md"';
+
+# Edit shell config folder in the default $VISUAL editor
+alias edrc='"$VISUAL" "$DOTFILE_DIR/../../../"';
+
+# -------------------------------------------------------------------------------------------------------------------- #

@@ -1,0 +1,91 @@
+[alias]
+    lg = log --abbrev-commit --decorate=auto --date=format:'%Y-%m-%d %a' --format=format:'%C(yellow)%h%C(reset)  %C(cyan)%ad%C(reset)  %C(green)%<(16,trunc)%an%C(reset)  %C(italic)%>|(1)%s%C(reset) %C(bold 1)%d%C(reset)'
+
+[core]
+    editor = nvim
+    # On GNOME
+    pager  = LESS=-R delta --features "$(case "$(gsettings get org.gnome.desktop.interface gtk-theme)" in *"dark"*) echo "dark-theme" ;; *) echo "light-theme" ;; esac)"
+    # On MacOS
+    # pager = delta --features "$(defaults read -globalDomain AppleInterfaceStyle > /dev/null 2>&1 && echo "dark-theme" || echo "light-theme")"
+
+[delta "dark-theme"]
+    blame-code-style                                   = syntax
+    blame-format                                       = "{author:<18} ({commit:>9}) {timestamp:^16}"
+    blame-palette                                      = "#2E3440" "#3B4252" "#434C5E" "#4C566A"
+    dark                                               = true
+    file-added-label                                   = [+]
+    file-copied-label                                  = [==]
+    file-decoration-style                              = "#434C5E" ul
+    file-modified-label                                = [*]
+    file-removed-label                                 = [-]
+    file-renamed-label                                 = [->]
+    file-style                                         = box yellow bold ul
+    hunk-header-style                                  = omit
+    keep-plus-minus-markers                            = false
+    line-numbers                                       = true
+    line-numbers-left-format                           = " {nm:>3} │"
+    line-numbers-left-style                            = red
+    line-numbers-minus-style                           = red italic black
+    line-numbers-plus-style                            = green italic black
+    line-numbers-right-format                          = " {np:>3} │"
+    line-numbers-right-style                           = green
+    line-numbers-zero-style                            = "#434C5E" italic
+    merge-conflict-begin-symbol                        = ~
+    merge-conflict-end-symbol                          = ~
+    merge-conflict-ours-diff-header-decoration-style   = "#434C5E" box
+    merge-conflict-ours-diff-header-style              = "#F1FA8C" bold
+    merge-conflict-theirs-diff-header-decoration-style = "#434C5E" box
+    merge-conflict-theirs-diff-header-style            = "#F1FA8C" bold
+    minus-emph-style                                   = bold "#202020" "#FF5555"
+    minus-non-emph-style                               = bold
+    minus-style                                        = bold red
+    plus-emph-style                                    = bold "#202020" "#50FA7B"
+    plus-non-emph-style                                = bold
+    plus-style                                         = bold green
+    side-by-side                                       = true
+    syntax-theme                                       = none
+    zero-style                                         = syntax
+
+[delta "light-theme"]
+    blame-code-style                                   = syntax
+    blame-format                                       = "{author:<18} ({commit:>9}) {timestamp:^16}"
+    blame-palette                                      = "#2E3440" "#3B4252" "#434C5E" "#4C566A"
+    file-added-label                                   = [+]
+    file-copied-label                                  = [==]
+    file-decoration-style                              = "#434C5E" ul
+    file-modified-label                                = [*]
+    file-removed-label                                 = [-]
+    file-renamed-label                                 = [->]
+    file-style                                         = box yellow bold ul
+    hunk-header-style                                  = omit
+    keep-plus-minus-markers                            = false
+    line-numbers                                       = true
+    line-numbers                                       = true
+    line-numbers-left-format                           = " {nm:>3} │"
+    line-numbers-left-style                            = red
+    line-numbers-minus-style                           = red italic
+    line-numbers-plus-style                            = green italic
+    line-numbers-right-format                          = " {np:>3} │"
+    line-numbers-right-style                           = green
+    line-numbers-zero-style                            = "#434C5E" italic
+    map-styles                                         = bold purple => syntax "#feecf7", \
+                                                         bold blue   => syntax "#e5dff6", \
+                                                         bold cyan   => syntax "#d8fdf6", \
+                                                         bold yellow => syntax "#f4ffe0"
+    merge-conflict-begin-symbol                        = ~
+    merge-conflict-end-symbol                          = ~
+    merge-conflict-ours-diff-header-decoration-style   = "#434C5E" box
+    merge-conflict-ours-diff-header-style              = "#F1FA8C" bold
+    merge-conflict-theirs-diff-header-decoration-style = "#434C5E" box
+    merge-conflict-theirs-diff-header-style            = "#F1FA8C" bold
+    minus-emph-style                                   = syntax "#f6b6b6"
+    minus-style                                        = syntax "#fbdada"
+    plus-emph-style                                    = syntax "#adffad"
+    plus-style                                         = syntax "#d6ffd6"
+    side-by-side                                       = true
+    syntax-theme                                       = none
+    whitespace-error-style                             = "#aaaaaa"
+    zero-style                                         = syntax
+
+[merge]
+    conflictstyle = diff3

@@ -1,0 +1,6 @@
+
+# Espanso matches that are useful in chat apps.
+
+filter_title: "(Slack|Telegram|WhatsApp)"
+extra_includes:
+  - "../match/_chat.yml"

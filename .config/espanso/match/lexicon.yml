@@ -1,0 +1,60 @@
+# Espanso matches pertaining to language, vocabulary, spelling etc
+
+matches:
+
+  # German accents
+
+  - trigger: ":a:"
+    replace: "ä"
+    propagate_case: true
+
+  - trigger: ":u:"
+    replace: "ü"
+    propagate_case: true
+
+  - trigger: ":o:"
+    replace: "ö"
+    propagate_case: true
+
+  - trigger: ":s:"
+    replace: "ß"
+    propagate_case: true
+
+  - trigger: ":mu:"
+    replace: "μ"
+    propagate_case: true
+
+  # Abbreviations
+
+  - trigger: "abt"
+    replace: "about"
+    word: true
+    propagate_case: false
+
+  - trigger: "Abt"
+    replace: "About"
+    word: true
+    propagate_case: false
+
+  - trigger: "shld"
+    replace: "should"
+    word: true
+    propagate_case: false
+
+    # Typos
+
+  - triggers: ["ubunut", "ubunutu", "ubuntut", "ubuunut", "ubnutnu"]
+    replace: "Ubuntu"
+    propagate_case: true
+
+  - triggers: ["bahs", "bahsh"]
+    replace: "bash"
+    propagate_case: true
+
+  - triggers: ["whihc", "whihch"]
+    replace: "which"
+    propagate_case: true
+
+  - triggers: ["insatll", "isntall"]
+    replace: "install"
+    propagate_case: true

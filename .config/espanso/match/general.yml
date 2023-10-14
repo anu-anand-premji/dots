@@ -1,0 +1,117 @@
+# Espanso expansions
+
+matches:
+
+########################################################################################################################
+
+# General
+
+  - trigger: ":dc"
+    replace: "°C"
+    propagate_case: false
+
+  - trigger: ":eur"
+    replace: "€"
+    propagate_case: false
+
+  - trigger: ":inr"
+    replace: "₹"
+    propagate_case: false
+
+  - triggers: [":abh", ":Abh", ":ABH"]
+    replace: "Ausländerbehörde"
+    word: true
+    propagate_case: false
+
+  - triggers: [":bawu", ":Bawu", ":BAWU"]
+    replace: "Baden-Württemberg"
+    word: true
+    propagate_case: false
+
+########################################################################################################################
+
+# Personal
+
+    # $|$ - place cursor here after expansion
+  - trigger: ":fn"
+    replace: "Anu Anand Premji$|$"
+    word: true
+
+########################################################################################################################
+
+ # Markdown
+
+  # Insert clipboard as a markdown link
+  - trigger: ":mdl"
+    replace: "[$|$]({{clipboard}})" # [|](https://example.com)
+    vars:
+      - name: "clipboard"
+        type: "clipboard"
+
+  # Insert markdown underline
+  - trigger: ":mdu"
+    replace: "<u>$|$</u>"
+
+  # Insert markdown page break
+  - trigger: ":mdb"
+    replace: "<div style=\"page-break-after: always;\"></div>"
+
+########################################################################################################################
+
+### Programming
+
+  - trigger: ":print"
+    replace: "printf(\"=%d\\n\",);"
+    word: true
+
+  - trigger: ":logpytest"
+    replace: "logger.info('{}'.format())"
+    word: true
+
+  - trigger: ":printxmos"
+    replace: |
+              static uint32_t print_idx = 0;
+              if(!(print_idx % 4096)) {
+                printf("= %d\n",);
+                } print_idx += 1;
+    word: true
+
+########################################################################################################################
+
+### Dates
+
+# Date expansion follows https://docs.rs/chrono/0.3.1/chrono/format/strftime/index.html
+
+  - trigger: ":ddd"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%d-%m-%Y, %a"
+
+  - trigger: ":tdd"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%R, %d-%m-%Y, %a"
+
+  - trigger: ":ddw"
+    replace: "### CW{{year}}{{week_number}} Weekly Sync - Week {{week_number}}, {{month}} {{year}}\n\n-"
+    vars:
+      - name: week_number
+        type: date
+        params:
+          format: "%U"
+      - name: month
+        type: date
+        params:
+          format: "%b"
+      - name: year
+        type: date
+        params:
+          format: "%y"
+
+########################################################################################################################

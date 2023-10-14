@@ -1,0 +1,281 @@
+#!/bin/sh
+
+# Shell functions compatible with BASH & ZSH
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Confirm user input and then proceed or abort
+
+# Usage (call with a prompt string or use a default):
+# - With custom user input:
+#		$ if confirm 'Install Software?'; then echo "Installing Software"; else echo "Cancelled"; fi
+# - Without user input (uses default message):
+#		$ if confirm; then echo "Done"; else echo "Cancelled"; fi
+
+confirm()
+{
+	local message="${1:-Are you sure you want to continue? [y/N]}"
+	if   [ -n "$ZSH_VERSION" ];  then read -q "REPLY?$message ";
+	elif [ -n "$BASH_VERSION" ]; then read -r -p "$message " REPLY; fi
+
+	case "$REPLY" in
+		[yY][eE][sS]|[yY]) 	printf '\n'; return 0; ;;
+		*) 					printf '\n'; return 1; ;;
+	esac
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Update, upgrade and clean apt packages, flatpaks and snaps in your system
+
+function update_yum()
+{
+# TODO
+}
+
+function update_apt()
+{
+	sudo apt update -qq;
+
+	echo -e "\nChecking for available apt updates...";
+
+	if __has aptitude; then aptitude search '~U';
+	else sudo apt-get -s dist-upgrade | awk '/^Inst/ { print $2 }'; fi
+
+	echo
+
+	if ! confirm 'Continue ? [y/N]'; then echo "Update Cancelled"; return 1; fi
+
+	# System Update and Upgrade
+	sudo apt update;
+	sudo apt install --fix-missing -y;
+	sudo apt upgrade --allow-downgrades -y;
+	sudo apt full-upgrade --allow-downgrades -y;
+
+	# System Clean Up
+	sudo apt install -f;
+	sudo apt autoremove -y;
+	sudo apt autoclean;
+	sudo apt clean;
+}
+
+function update_flatpaks()
+{
+	if ! __has flatpak; then echo "Flatpak is not installed"; return 1; fi
+	if ! confirm 'Start Flatpak update ? [y/N]'; then echo "Flatpak update Cancelled"; return 1; fi
+
+	echo -e "\nStarting Flatpak update...\n";
+	flatpak update -y;
+
+	echo -e "Doing Flatpak clean-up...\n";
+	flatpak uninstall --delete-data -y;
+	flatpak uninstall --unused -y;
+
+	echo "Flatpak update finished.\n";
+}
+
+function update_snaps()
+{
+	if ! confirm 'Start Snap update ? [y/N]'; then echo "Snap update Cancelled"; return 1; fi
+    echo -e "\nStarting Snap update...\n";
+    sudo snap refresh;
+    echo "Snap update finished.\n";
+
+}
+
+function do_update()
+{
+	if [ -z "$(which apt-get 2>/dev/null)" ]; then echo -e "Not running Ubuntu. Exiting."; return 1; fi
+
+	echo -e "\nStarting system update...";
+	update_apt; # TODO: check OS and call the correct package manager here
+	update_flatpaks;
+    update_snaps;
+
+	echo "Done. It's good practice to do a system reboot now."
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Cross-platform clipboard copy and paste functions that works with the following platforms
+# Defines two functions, clipcopy and clippaste, based on the detected platform.
+#
+# clipcopy - Copy data to clipboard
+#    <command> | clipcopy  - copies stdin to clipboard
+#    clipcopy <file>       - copies a file's contents to clipboard
+#
+# clippaste - "Paste" data from clipboard to stdout
+#    clippaste             - paste clipboard's contents to stdout
+#    clippaste | <command> - pipe clipboard's content to another process
+#    clippaste > <file>    - paste contents to a file
+
+detect_clipboard()
+{
+	if [[ "${OSTYPE}" == darwin* ]] && _has pbcopy && _has pbpaste; then
+		function clipcopy() { cat "${1:-/dev/stdin}" | pbcopy; }
+		function clippaste() { pbpaste; }
+
+	elif [[ "${OSTYPE}" == cygwin* || "${OSTYPE}" == msys* ]]; then
+		function clipcopy() { cat "${1:-/dev/stdin}" > /dev/clipboard; }
+		function clippaste() { cat /dev/clipboard; }
+
+	elif _has clip.exe && _has powershell.exe; then
+		function clipcopy() { cat "${1:-/dev/stdin}" | clip.exe; }
+		function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
+
+	elif [ -n "${WAYLAND_DISPLAY:-}" ] && _has wl-copy && _has wl-paste; then
+		function clipcopy() { cat "${1:-/dev/stdin}" | wl-copy >/dev/null 2>&1; }
+		function clippaste() { wl-paste; }
+
+	elif [ -n "${DISPLAY:-}" ] && _has xsel; then
+		function clipcopy() { cat "${1:-/dev/stdin}" | xsel --clipboard --input; }
+		function clippaste() { xsel --clipboard --output; }
+
+	elif [ -n "${DISPLAY:-}" ] && _has xclip; then
+		function clipcopy() { cat "${1:-/dev/stdin}" | xclip -selection clipboard -in >/dev/null 2>&1; }
+		function clippaste() { xclip -out -selection clipboard; }
+
+	elif [[ $OSTYPE == linux-android* ]] && _has termux-clipboard-set; then
+		function clipcopy() { cat "${1:-/dev/stdin}" | termux-clipboard-set; }
+		function clippaste() { termux-clipboard-get; }
+
+	elif [ -n "${TMUX:-}" ] && _has xclip; then
+		function clipcopy() { tmux load-buffer "${1:--}"; }
+		function clippaste() { tmux save-buffer -; }
+
+	fi
+}
+
+detect_clipboard;
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# glg() - fuzzy search git commits and then press:
+#	    - ENTER for git show (what changed in that commit)
+#	    - CTRL-D for git diff (between that commit and ^HEAD)
+#	    - CTRL-Y to copy the commit id
+#	    - CTRL-H to checkout the commit
+
+# Dependencies: git, fzf, awk, sed, clipcopy
+
+function glg()
+{
+	local out shas sha q k
+	while out=$(git lg "$@" |
+				fzf --no-sort --no-info --query="$q" --print-query --expect=ctrl-d,ctrl-y,ctrl-h); do
+		q=$(head -1 <<< "$out");
+		k=$(head -2 <<< "$out" | tail -1);
+		shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}');
+		[ -z "$shas" ] && continue
+		if [ "$k" = ctrl-d ]; then git diff --color=always $shas;
+		elif [ "$k" = ctrl-y ]; then echo -n $shas | clipcopy;
+		elif [ "$k" = ctrl-h ]; then git checkout $shas;
+		else for sha in $shas; do git show --color=always $sha; done
+		fi
+	done
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# op() - fuzzy find a file or directory and then press:
+#      - ENTER    - cd to the root directory of the selected entry
+#      - CTRL + V - open the selected entry in the default $VISUAL editor
+#      - CTRL + N - open the selected entry in the default $EDITOR
+#      - CTRL + O - open the selected entry in the default system app
+#      - CTRL + E - open the selected entry in the default file explorer
+#      - CTRL + Y - yank the selected entry in to the clipboard
+#        For truncated entries, use ? key to toggle a preview window
+
+# Usage:
+# op <path/to/search>  (if invoked without a path, search under $HOME)
+
+# Dependencies: fzf, fd/locate, clipcopy
+
+# TODO: For Ctrl-O, use a generic open_in_default_system_app() that works with bash,zsh,linux,wsl,macos
+# TODO: For Ctrl-E, use a generic open_in_default_files_app() that works with bash,zsh,linux,wsl,macos
+
+function op()
+{
+	# entries=("$(locate ${1:-~} |                                                                               \
+	entries=("$(fd -I --full-path --hidden --exclude ".git" --color=never . ${1:-~} |                          \
+				fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --exit-0 \
+					--expect=ctrl-o,ctrl-v,ctrl-n,ctrl-y,ctrl-e --header-first                                 \
+					--header='↵:cd | ^E: File Explorer | ^V: $VISUAL | ^N: $EDITOR | ^O: System App | ^Y: Copy')");
+
+	key="$(head -1 <<< "${entries[@]}")";
+	sel="$(head -2 <<< "${entries[@]}" | tail -1)" || return;
+
+	if   [[ "$key" == ctrl-o ]]; then open "$sel";
+	elif [[ "$key" == ctrl-v ]]; then "$VISUAL" "$sel";
+	elif [[ "$key" == ctrl-n ]]; then "$EDITOR" "$sel";
+	elif [[ "$key" == ctrl-e ]]; then if [[ -d "$sel" ]]; then xdg-open "$sel"; else xdg-open $(dirname "$sel"); fi
+	elif [[ "$key" == ctrl-y ]]; then printf "$sel" | clipcopy;
+	elif [[ -d "$sel" ]] ; then cd "$sel"; else cd "$(dirname "$sel")";
+	fi
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# fkill() - Fuzzy find a process and kill it
+
+# Dependencies: fzf, sed, awk
+
+function fkill()
+{
+	local pid
+
+	if [ "$UID" != "0" ]; then pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}');
+	else pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}');
+	fi
+
+	if [ "x$pid" != "x" ]; then echo $pid | xargs kill -${1:-9}; fi
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# gh() - Open GitHub page of a repository from the terminal
+
+# gh from a non git repo gives you an error message and exists
+# gh from a repo opens it. Works with github, gitlab, etc...
+# gh <remote> opens . For eg, gh upstream.
+
+# Dependencies: git, sed
+
+function gh()
+{(
+    set -e
+    git remote -v | grep push
+    remote=${1:-origin}
+    echo "Using remote $remote"
+
+    URL=$(git config remote.$remote.url | sed "s/git@\(.*\):\(.*\).git/https:\/\/\1\/\2/")
+    echo "Opening $URL..."
+    open $URL
+)}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# oc() - Run a command from terminal, detach the process and then close the terminal without terminating the command
+
+# Usage:
+# oc meld /home/dotfiles /home/repo
+
+oc() {
+    "$@" &
+    disown
+    exit
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Dependency check
+
+if ! command -v fzf      >/dev/null 2>&1; then echo "fzf not found.";         fi
+if ! command -v git      >/dev/null 2>&1; then echo "git not found.";         fi
+if ! command -v sed      >/dev/null 2>&1; then echo "sed not found.";         fi
+if ! command -v awk      >/dev/null 2>&1; then echo "awk not found.";         fi
+if ! command -v clipcopy >/dev/null 2>&1; then echo "clipcopy not found.";    fi
+if ! command -v $EDITOR  >/dev/null 2>&1; then echo "EDITOR not set.";        fi
+if ! command -v $VISUAL  >/dev/null 2>&1; then echo "VISUAL editor not set."; fi
+
+# -------------------------------------------------------------------------------------------------------------------- #

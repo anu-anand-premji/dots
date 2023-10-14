@@ -1,0 +1,82 @@
+# Dotfiles
+
+This repository contains my dotfiles.
+
+## 1. Shell Configuration
+
+The dotfiles are for the BASH & ZSH shells.
+
+### 1.1 Screenshots
+
+TODO:
+
+### 1.2 Usage Instructions
+
+- Clone this repository. For clarity, the following instructions will assume the repo was cloned into `$HOME/repo/`
+- Open `$HOME/repo/.config/shell/bash/.bashrc` or `$HOME/repo/.config/shell/zsh/.zshenv` in a text editor
+- Set `$DOTFILE_DIR` to the directory which contains that `.bashrc` or `.zshenv` file. For example,
+  ```shell
+  export DOTFILE_DIR="$HOME/repo/.config/shell/zsh";  # in .zshenv
+  export DOTFILE_DIR="$HOME/repo/.config/shell/bash"; # in .bashrc
+  ```
+- Install the fonts in `$HOME/repo/.config/fonts` to display the shell prompts properly
+  ```
+  $ cp -av "$HOME/repo/.config/fonts/." "$HOME/.local/share/fonts/"
+  ```
+- Now, you can either:
+	- Source the `.bashrc` or `.zshenv` from `$HOME/.bashrc` or `$HOME/.zshenv`
+	- Symlink the `.bashrc` or `.zshenv` to `$HOME/<your-shellrc>` using:
+	  ```shell
+	  $ ln -sf "$HOME/repo/.config/shell/zsh/.zshenv" "$HOME/.zshenv"  # For ZSH
+	  $ ln -sf "$HOME/repo/.config/shell/bash/.bashrc" "$HOME/.bashrc" # For BASH
+	  ```
+- Reload your shell and everything should now be working as expected
+
+### 1.3 Files
+
+Settings/functions for BASH and ZSH shells.
+
+| Filename    | Function                                          |
+| ----------- | ------------------------------------------------- |
+|`.aliases`   | Aliases that work across BASH & ZSH               |
+|`.exports`   | Global exports, XDG specification directories etc |
+|`.functions` | Shell functions that work across BASH & ZSH       |
+|`.bashrc`    | BASH configuration file                           |
+|`.bashprompt`| Custom BASH prompt                                |
+|`.zshprompt` | Custom ZSH prompt                                 |
+|`.zshrc`     | ZSH configuration file                            |
+|`.zshenv`    | Sets ZDOTDIR and other global ZSH defaults        |
+
+### 1.4 Prompt
+
+The custom shell prompt defined in `bashprompt` & `zshprompt` provides the shells with the following features:
+
+| Feature                                             | ZSH | BASH |
+|-----------------------------------------------------|-----|------|
+| Username                                            | ✓   |  ✓   |
+| Hostname                                            | ✓   |  ✓   |
+| Working directory name                              | ✓   |  ✓   |
+| Is working directory read-only                      | ✓   |  ✓   |
+| Git branch name                                     | ✓   |  ✓   |
+| Is inside a Git submodule                           | ✓   |  ✓   |
+| Number of Git stashes                               | ✓   |  ✓   |
+| Custom Python venv indication                       | ✓   |  ✓   |
+| Green/Red prompt symbol based on previous exit code | ✓   |  ⨯   |
+| Previous command duration                           | ✓   |  ⨯   |
+
+Features can be individually turned on/off easily by commenting out a single line in the function `set_prompt()`
+
+### 1.5 Keybindings
+
+These are the keybindings that are currently defined across BASH and ZSH
+
+| Keybinding | Function                                                      | Dependency   | ZSH | BASH |
+|------------|---------------------------------------------------------------|--------------|-----|------|
+| `Ctrl-R`   | Fuzzy search history and then paste the selected entry        | fzf          |  ✓  |  ✓   |
+| `Ctrl-T`   | Fuzzy search files & directories and paste the selected entry | fzf, fd-find |  ✓  |  ✓   |
+| `Up`       |                                                               | -            |  ✓  |  ✓   |
+| `Down`     |                                                               | -            |  ✓  |  ✓   |
+
+### 1.6 Additional
+
+- ZSH has an additional function where only valid commands gets stored in the history file

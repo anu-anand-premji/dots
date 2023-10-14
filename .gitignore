@@ -1,0 +1,21 @@
+# IDEs
+/.vs/
+/.vscode/
+/.idea/
+config/nvim/plugged
+
+# Build/deps dir
+/build/
+/.deps/
+/tmp/
+/.clangd/
+/.cache/clangd/
+/.ccls-cache/
+
+# OS
+.DS_Store
+*.mo
+.*.sw?
+*.pyc
+*.o
+*.so

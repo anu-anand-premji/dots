@@ -1,0 +1,187 @@
+# Set a custom ZSH prompt
+
+# Install a nerd font to render all the characters in this file correctly - https://github.com/ryanoasis/nerd-fonts
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Overview
+# --------
+
+# is_in_git_submodule() - print "[submodule]" if inside a git submodule
+# is_pwd_read_only()    - show a  symbol after $PWD, if $PWD is read only
+# show_elapsed_time()   - display the duration of a command
+# show_git_branch()     - print the current git branch, shows if HEAD detached
+# show_git_stash()      - print the number of stashes, if any
+# show_python_venv()    - disable prompt mangling in venv/bin/activate and print the python venv name, if active
+# set_prompt()          - define a custom prompt using the above functions
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Hooks
+
+# Some features require estimation inside preexec() & precmd()
+# - Calculate and save the elapsed time of the previous command
+# - Save exit codes of the previous command
+# - Load terminal title
+
+zmodload zsh/datetime
+
+prompt_preexec() {
+  preexec_timer=${EPOCHREALTIME}
+}
+
+prompt_precmd() {
+
+	# Before everything else, fetch the exit code of the previous command
+	typeset -gi LAST_EXIT_CODE=$?
+
+	print -Pn "\e]0;%~\a"; # load terminal title into premcmd()
+
+	if (( preexec_timer )); then
+		local -rF elapsed_realtime=$(( EPOCHREALTIME - preexec_timer ))
+		local -rF s=$(( elapsed_realtime%60 ))
+		local -ri elapsed_s=${elapsed_realtime}
+		local -ri m=$(( (elapsed_s/60)%60 ))
+		local -ri h=$(( elapsed_s/3600 ))
+		if   (( h > 0 ));   then printf -v prompt_elapsed_time '%ih%im' ${h} ${m}
+		elif (( m > 0 ));   then printf -v prompt_elapsed_time '%im%is' ${m} ${s}
+		elif (( s >= 10 )); then printf -v prompt_elapsed_time '%.2fs' ${s} # 12.34s
+		elif (( s >= 1 ));  then printf -v prompt_elapsed_time '%.3fs' ${s} # 1.234s
+		else printf -v prompt_elapsed_time '%ims' $(( s*1000 ))
+		fi
+		unset preexec_timer
+	else
+    # Clear previous result when hitting ENTER with no command to execute
+    unset prompt_elapsed_time
+  fi
+}
+
+setopt nopromptbang prompt{cr,percent,sp,subst}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec prompt_preexec
+add-zsh-hook precmd prompt_precmd
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Show "[submodule]" if inside a git submodule
+
+function is_in_git_submodule()
+{
+	[ ! -z "$(git rev-parse --show-superproject-working-tree 2>/dev/null)" ] && printf " [submodule]";
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Print a  symbol after $PWD, if $PWD is read only
+
+function is_pwd_read_only()
+{
+	[ ! -w "$PWD" ] && printf "";
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Display the duration of a command
+
+function show_elapsed_time()
+{
+	# prompt_elapsed_time is calculated in precmd()
+	# as trailing '\n' are trimmed, add a non-printing last char ('\r')
+	[ ! -z ${prompt_elapsed_time} ] && printf "(took ${prompt_elapsed_time})\n\r";
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Display a tick if the last command succeeded, else display a cross
+
+function show_exit_symbol()
+{
+	[[ $LAST_EXIT_CODE -ne 0 ]] && echo " " || echo "  "
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Print the current git branch, shows if HEAD detached
+
+function show_git_branch()
+{
+	if git rev-parse --git-dir > /dev/null 2>&1; then
+		printf " $(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')";
+	fi;
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Print the number of stashes, if any
+
+function show_git_stash()
+{
+	if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
+		printf "  $(git stash list 2>/dev/null | wc -l)";
+	fi
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Disable prompt mangling in venv/bin/activate and show the python venv name, if active
+
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+function show_python_venv()
+{
+	if [[ -v VIRTUAL_ENV ]]; then
+		printf " ${VIRTUAL_ENV##*/}\n\r"; # as trailing '\n' are trimmed, add a non-printing last char ('\r')
+	fi
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# Define a custom prompt using the above functions
+
+function set_prompt()
+{
+	setopt PROMPT_SUBST # parameter expansion, command substitution and arithmetic expansion are performed in prompts
+
+	# Define consistent colours & styles that can be used to customize the prompt
+	# Wrap tput output in %{ %} - helps zsh to ignore non-printable characters and correctly calculate the prompt size
+	black="%{$(printf "\033[1;30m")%}";
+	blue="%{$(printf "\033[1;34m")%}";
+	bold="%{$(printf "\033[1m")%}";
+	cyan="%{$(printf "\033[1;36m")%}";
+	green="%{$(printf "\033[1;32m")%}";
+	magenta="%{$(printf "\033[1;35m")%}";
+	red="%{$(printf "\033[1;31m")%}";
+	reset="%{$(printf "\033[0m")%}";
+	white="%{$(printf "\033[1;37m")%}";
+	yellow="%{$(printf "\033[1;33m")%}";
+
+	# ZSH prompt variables
+	username='%n';
+	hostname='%m ';
+	pwd=' %~ ';
+
+	# Change prompt symbol colour from green to red if the previous command failed
+	# LAST_EXIT_CODE is set in precmd()
+	function prompt_color { [[ $LAST_EXIT_CODE -ne 0 ]] && echo "${red}" || echo "${green}" };
+
+	PS1='${bold}$(prompt_color)$(show_exit_symbol)${reset}'
+	PS1+='${bold}$(prompt_color)$(show_elapsed_time)${reset}'; # show elapsed time in seconds, if more than 2
+	PS1+=$'\n';                                                # newline
+	PS1+='${bold}${green}$(show_python_venv)${reset}';         # python venv
+	# PS1+='${bold}${green}${username}${reset}';               # username (%n)
+	# PS1+='${bold}${white}@${reset}';                         # @
+	# PS1+='${bold}${yellow}${hostname}${reset}';              # hostname (%m)
+	PS1+='${bold}${blue}${pwd}${reset}';                       # working directory full path (%~) with folder icon
+	PS1+='${bold}${red}$(is_pwd_read_only)${reset}';           # read-only indicator
+	PS1+='${bold}${yellow}$(show_git_branch)${reset}';         # git branch name with branch icon
+	PS1+='${bold}${red}$(show_git_stash)${reset}';             # number of git stashes with stash icon
+	PS1+='${bold}${red}$(is_in_git_submodule)${reset}';        # show "[submodule]" if inside a git submodule
+	PS1+=$'\n';                                                # newline
+	PS1+='${bold}$(prompt_color)❱ ${reset}';                   # set red/green prompt if previous command failed/passed
+}
+
+# Enable the custom shell prompt
+set_prompt;
+
+# -------------------------------------------------------------------------------------------------------------------- #

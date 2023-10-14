@@ -1,0 +1,9 @@
+filter_class: "kitty"
+toggle_key: ALT
+#backend: Clipboard
+disable_x11_fast_inject: true
+x11_use_xclip_backend: true
+paste_shortcut: SHIFT+INSERT
+show_notifications: true
+clipboard_threshold: 100
+apply_patch: true
