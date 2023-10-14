@@ -143,7 +143,7 @@ function copyabsolutepath() {
 	print -n "${file:a}" | clipcopy || return 1
 
 	# Message with the path in bold letters
-	echo ${(%):-"%B${file:a}%b copied to clipboard."}
+	echo ${(%):-"%B\"${file:a}\"%b copied to clipboard."}
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -167,13 +167,13 @@ function flog()
 	while out=$(git log --date=format:'%Y-%m-%d %a' --format=format:'%h  %ad  %<(16,trunc)%an  %>|(1)%s %d' "$@" |
 				fzf --no-sort --no-info --query="$q" --print-query --expect=ctrl-d,ctrl-y,ctrl-h  \
 					--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' \
-					--header-first --header='↵: Show | ^D: Diff | ^Y: Copy | ^H: Checkout'); do
+					--header-first --header='↵: Show | ^D: Diff | ^Y: Copy Hash | ^H: Checkout'); do
 		q=$(head -1 <<< "$out");
 		k=$(head -2 <<< "$out" | tail -1);
 		shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}');
 		[ -z "$shas" ] && continue
 		if   [ "$k" = ctrl-d ]; then git diff --color=always $shas;
-		elif [ "$k" = ctrl-y ]; then echo -n $shas | clipcopy && echo "$shas copied to clipboard." || return 1;
+		elif [ "$k" = ctrl-y ]; then (echo -n $shas | clipcopy) && echo "$shas copied to clipboard." || return 1;
 		elif [ "$k" = ctrl-h ]; then git checkout $shas;
 		else for sha in $shas; do git show --color=always $sha; done
 		fi
