@@ -150,25 +150,48 @@ detect_clipboard;
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
-# glg() - fuzzy search git commits and then press:
-#	    - ENTER for git show (what changed in that commit)
-#	    - CTRL-D for git diff (between that commit and ^HEAD)
-#	    - CTRL-Y to copy the commit id
-#	    - CTRL-H to checkout the commit
+# copyabsolutepath() - Copy the absolute path of a given directory or file ($PWD if no parameter given) to the clipboard
 
-# Dependencies: git, fzf, awk, sed, clipcopy
+# Dependencies: clipcopy
+
+function copyabsolutepath {
+	# If no argument passed, use current directory
+	local file="${1:-$PWD}"
+
+	# If argument is not an absolute path, prepend $PWD
+	[[ $file = /* ]] || file="$PWD/$file"
+
+	# Copy the absolute path without resolving symlinks and if clipcopy fails, exit the function with an error
+	print -n "${file:a}" | clipcopy || return 1
+
+	# Message with the path in bold letters
+	echo ${(%):-"%B${file:a}%b copied to clipboard."}
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
+
+# glg() - fuzzy search git commits and then press:
+#		- ENTER  - git show (what changed in that commit)
+#		- CTRL-D - git diff (between that commit and ^HEAD)
+#		- CTRL-Y - copy the commit id
+#		- CTRL-H - checkout the commit
+#		  For truncated entries, use ? key to toggle a preview window
+
+# Dependencies: git, fzf, awk, sed, clipcopy()
 
 function glg()
 {
 	local out shas sha q k
-	while out=$(git lg "$@" |
-				fzf --no-sort --no-info --query="$q" --print-query --expect=ctrl-d,ctrl-y,ctrl-h); do
+	while out=$(git log --date=format:'%Y-%m-%d %a' --format=format:'%h  %ad  %<(16,trunc)%an  %>|(1)%s %d' "$@" |
+				fzf --no-sort --no-info --query="$q" --print-query --expect=ctrl-d,ctrl-y,ctrl-h  \
+					--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' \
+					--header-first --header='↵: Show | ^D: Diff | ^Y: Copy | ^H: Checkout'); do
 		q=$(head -1 <<< "$out");
 		k=$(head -2 <<< "$out" | tail -1);
 		shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}');
 		[ -z "$shas" ] && continue
-		if [ "$k" = ctrl-d ]; then git diff --color=always $shas;
-		elif [ "$k" = ctrl-y ]; then echo -n $shas | clipcopy;
+		if   [ "$k" = ctrl-d ]; then git diff --color=always $shas;
+		elif [ "$k" = ctrl-y ]; then echo -n $shas | clipcopy && echo "$shas copied to clipboard." || return 1;
 		elif [ "$k" = ctrl-h ]; then git checkout $shas;
 		else for sha in $shas; do git show --color=always $sha; done
 		fi
@@ -178,18 +201,18 @@ function glg()
 # -------------------------------------------------------------------------------------------------------------------- #
 
 # op() - fuzzy find a file or directory and then press:
-#      - ENTER    - cd to the root directory of the selected entry
+#      - ENTER    - cd to the selected entry
 #      - CTRL + V - open the selected entry in the default $VISUAL editor
 #      - CTRL + N - open the selected entry in the default $EDITOR
 #      - CTRL + O - open the selected entry in the default system app
 #      - CTRL + E - open the selected entry in the default file explorer
-#      - CTRL + Y - yank the selected entry in to the clipboard
+#      - CTRL + Y - yank the selected entry to the clipboard
 #        For truncated entries, use ? key to toggle a preview window
 
 # Usage:
 # op <path/to/search>  (if invoked without a path, search under $HOME)
 
-# Dependencies: fzf, fd/locate, clipcopy
+# Dependencies: fzf, fd/locate, copyabsolutepath()
 
 # TODO: For Ctrl-O, use a generic open_in_default_system_app() that works with bash,zsh,linux,wsl,macos
 # TODO: For Ctrl-E, use a generic open_in_default_files_app() that works with bash,zsh,linux,wsl,macos
@@ -209,7 +232,7 @@ function op()
 	elif [[ "$key" == ctrl-v ]]; then "$VISUAL" "$sel";
 	elif [[ "$key" == ctrl-n ]]; then "$EDITOR" "$sel";
 	elif [[ "$key" == ctrl-e ]]; then if [[ -d "$sel" ]]; then xdg-open "$sel"; else xdg-open $(dirname "$sel"); fi
-	elif [[ "$key" == ctrl-y ]]; then printf "$sel" | clipcopy;
+	elif [[ "$key" == ctrl-y ]]; then copyabsolutepath $(printf "$sel");
 	elif [[ -d "$sel" ]] ; then cd "$sel"; else cd "$(dirname "$sel")";
 	fi
 }
@@ -235,9 +258,10 @@ function fkill()
 
 # gh() - Open GitHub page of a repository from the terminal
 
+# Usage:
 # gh from a non git repo gives you an error message and exists
 # gh from a repo opens it. Works with github, gitlab, etc...
-# gh <remote> opens . For eg, gh upstream.
+# gh <remote> opens the remote. For eg, gh upstream.
 
 # Dependencies: git, sed
 
@@ -255,27 +279,28 @@ function gh()
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
-# oc() - Run a command from terminal, detach the process and then close the terminal without terminating the command
+# oc() - Run a command from terminal, detach the process and then return to prompt without terminating the command
 
 # Usage:
-# oc meld /home/dotfiles /home/repo
+# oc meld ~/dotfiles ~/repo
 
 oc() {
     "$@" &
     disown
-    exit
+    return 0
 }
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
 # Dependency check
 
-if ! command -v fzf      >/dev/null 2>&1; then echo "fzf not found.";         fi
-if ! command -v git      >/dev/null 2>&1; then echo "git not found.";         fi
-if ! command -v sed      >/dev/null 2>&1; then echo "sed not found.";         fi
-if ! command -v awk      >/dev/null 2>&1; then echo "awk not found.";         fi
-if ! command -v clipcopy >/dev/null 2>&1; then echo "clipcopy not found.";    fi
-if ! command -v $EDITOR  >/dev/null 2>&1; then echo "EDITOR not set.";        fi
-if ! command -v $VISUAL  >/dev/null 2>&1; then echo "VISUAL editor not set."; fi
+if ! command -v fzf              >/dev/null 2>&1; then echo "fzf not found.";                fi
+if ! command -v git              >/dev/null 2>&1; then echo "git not found.";                fi
+if ! command -v sed              >/dev/null 2>&1; then echo "sed not found.";                fi
+if ! command -v awk              >/dev/null 2>&1; then echo "awk not found.";                fi
+if ! command -v $EDITOR          >/dev/null 2>&1; then echo "EDITOR not set.";               fi
+if ! command -v $VISUAL          >/dev/null 2>&1; then echo "VISUAL editor not set.";        fi
+if ! command -v clipcopy         >/dev/null 2>&1; then echo "clipcopy() not found.";         fi
+if ! command -v copyabsolutepath >/dev/null 2>&1; then echo "copyabsolutepath() not found."; fi
 
 # -------------------------------------------------------------------------------------------------------------------- #
