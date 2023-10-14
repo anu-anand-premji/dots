@@ -25,6 +25,19 @@
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
+# _has() - Check if a program is installed
+function _has()
+{
+	command -v $1 >/dev/null 2>&1;
+}
+
+# __has() - Check if a program is installed and return a message if not found
+function __has()
+{
+	if ! _has $1; then echo "$1 not found."; return 1; fi
+}
+
+# -------------------------------------------------------------------------------------------------------------------- #
 # Usage (call with a prompt string or use a default):
 # - With custom user input:
 #		$ if confirm 'Install Software?'; then echo "Installing Software"; else echo "Cancelled"; fi
@@ -316,13 +329,13 @@ od()
 
 # Dependency check
 
-if ! command -v fzf              >/dev/null 2>&1; then echo "fzf not found.";                fi
-if ! command -v git              >/dev/null 2>&1; then echo "git not found.";                fi
-if ! command -v sed              >/dev/null 2>&1; then echo "sed not found.";                fi
-if ! command -v awk              >/dev/null 2>&1; then echo "awk not found.";                fi
-if ! command -v $EDITOR          >/dev/null 2>&1; then echo "EDITOR not set.";               fi
-if ! command -v $VISUAL          >/dev/null 2>&1; then echo "VISUAL editor not set.";        fi
-if ! command -v clipcopy         >/dev/null 2>&1; then echo "clipcopy() not found.";         fi
-if ! command -v copyabsolutepath >/dev/null 2>&1; then echo "copyabsolutepath() not found."; fi
+if ! _has fzf             ; then echo "fzf not found.";                fi
+if ! _has git             ; then echo "git not found.";                fi
+if ! _has sed             ; then echo "sed not found.";                fi
+if ! _has awk             ; then echo "awk not found.";                fi
+if ! _has $EDITOR         ; then echo "EDITOR not set.";               fi
+if ! _has $VISUAL         ; then echo "VISUAL editor not set.";        fi
+if ! _has clipcopy        ; then echo "clipcopy() not found.";         fi
+if ! _has copyabsolutepath; then echo "copyabsolutepath() not found."; fi
 
 # -------------------------------------------------------------------------------------------------------------------- #

@@ -90,21 +90,9 @@ export LESS_TERMCAP_us=$(printf "\e[1;32m");
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
-# Handy function to determine if a program is installed
-function _has() {
-	command -v $1 >/dev/null 2>&1;
-}
-
-# Same as above but with verbosity
-function __has() {
-	if ! _has $1; then echo "$1 not found."; return 1; fi
-}
-
-# -------------------------------------------------------------------------------------------------------------------- #
-
 # Editor
 
-if __has nvim; then export EDITOR=nvim; else export EDITOR=vi; fi
-if __has code; then export VISUAL=code; else export VISUAL=$EDITOR; fi
+if command -v nvim >/dev/null 2>&1; then export EDITOR=nvim; else export EDITOR=vi; fi
+if command -v code >/dev/null 2>&1; then export VISUAL=code; else export VISUAL=$EDITOR; fi
 
 # -------------------------------------------------------------------------------------------------------------------- #
