@@ -9,7 +9,7 @@ if ! command -v fzf >/dev/null 2>&1; then echo "fzf no found."; return; fi
 # ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 export FZF_DEFAULT_COMMAND='find -type f';
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border=rounded --info=right';
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border=rounded --info=inline-right';
 
 # ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 # ║ CTRL-R - Fuzzy search history and then paste the selected entry                                                    ║
