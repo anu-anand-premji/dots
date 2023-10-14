@@ -13,6 +13,8 @@
 # detect_clipboard() - Defines two clipboard functions, clipcopy() and clippaste(), based on the detected platform
 # copyabsolutepath() - Copy the absolute path of a given directory or file ($PWD if no parameter given) to the clipboard
 # flog()             - Fuzzy search git commits
+# gco()              - Fuzzy git checkout branch/tag
+# ga()               - Fuzzy git add
 # ff()               - Fuzzy find a file or directory
 # fkill()            - Fuzzy find a process and kill it
 # gh()               - Open GitHub page of a repository from the terminal
@@ -159,6 +161,32 @@ function flog()
 		else for sha in $shas; do git show --color=always $sha; done
 		fi
 	done
+}
+
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+
+# gco() - Fuzzy git checkout branch/tag
+
+function gco()
+{
+	if ! git rev-parse --git-dir > /dev/null 2>&1; then
+		echo -e "Not inside a Git repository. Exiting."; return;
+	fi;
+
+	(git branch --all && git tag) | fzf | xargs git checkout;
+}
+
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+
+# ga() - Fuzzy git add
+
+function ga()
+{
+	if ! git rev-parse --git-dir > /dev/null 2>&1; then
+		echo -e "Not inside a Git repository. Exiting."; return;
+	fi;
+
+	git diff --name-only --line-prefix=`git rev-parse --show-toplevel`/ | fzf | xargs git add -v;
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

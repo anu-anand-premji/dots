@@ -82,8 +82,8 @@ alias sysinfo='sudo inxi -v 3';
 
 # Git
 alias g="git"
-alias gco='(git branch --all && git tag) | fzf | xargs git checkout'; # fuzzy git checkout branch/tag
-alias ga='git diff --name-only --line-prefix=`git rev-parse --show-toplevel`/ | fzf | xargs git add -v'; # fuzzy git add
+
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Open ToDo list in the default $EDITOR
 alias todo='"$EDITOR" "$DOTFILE_DIR/../../../../Notes/todo.md"';
