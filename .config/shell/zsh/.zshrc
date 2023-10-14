@@ -124,17 +124,17 @@ setopt no_rm_star_silent        # ask for confirmation for `rm *' or `rm path/*'
 # Keybinds
 
 # Start typing + [Up/Down] - fuzzy find history forward/backward
-bindkey '\e[A' history-search-backward
-bindkey '\e[B' history-search-forward
 if [[ "${terminfo[kcuu1]}" != "" ]]; then
     autoload -U up-line-or-beginning-search
     zle -N up-line-or-beginning-search
     bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
+	bindkey "^[[A" up-line-or-beginning-search
 fi
 if [[ "${terminfo[kcud1]}" != "" ]]; then
     autoload -U down-line-or-beginning-search
     zle -N down-line-or-beginning-search
     bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
+	bindkey "^[[B" down-line-or-beginning-search
 fi
 
 # Home & End Keys
