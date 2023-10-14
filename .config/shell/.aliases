@@ -49,8 +49,8 @@ alias fixsnap='sudo killall -s KILL snap-store && sudo snap refresh';
 # Show system information
 alias sysinfo='sudo inxi -v 3';
 
-# Git	
-alias g="git"	
+# Git
+alias g="git"
 alias gco='(git branch --all && git tag) | fzf | xargs git checkout'; # fuzzy git checkout branch/tag
 alias ga='git diff --name-only --line-prefix=`git rev-parse --show-toplevel`/ | fzf | xargs git add -v'; # fuzzy git add
 
@@ -59,5 +59,8 @@ alias todo='"$EDITOR" "$DOTFILE_DIR/../../../../Notes/todo.md"';
 
 # Edit shell config folder in the default $VISUAL editor
 alias edrc='"$VISUAL" "$DOTFILE_DIR/../../../"';
+
+# Diff dotfiles vs dotfiles on GitHub in Meld
+alias diffrc='oc meld "$DOTFILE_DIR/../../../../dotfiles" "$DOTFILE_DIR/../../../../dotfiles_git/dots"';
 
 # -------------------------------------------------------------------------------------------------------------------- #
