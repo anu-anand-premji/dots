@@ -17,6 +17,7 @@
 # ga()               - Fuzzy git add
 # ff()               - Fuzzy find a file or directory
 # fkill()            - Fuzzy find a process and kill it
+# cdrr()             - cd to the outermost git repository directory
 # gh()               - Open GitHub page of a repository from the terminal
 # od()               - Run a command, disown the process and then return to prompt without terminating the command
 # update_dnf()       - Run updates for DNF package manager
@@ -249,7 +250,22 @@ function fkill()
 	if [ "x$pid" != "x" ]; then echo $pid | xargs kill -${1:-9}; fi
 }
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+
+# cdrr() - cd to the outermost git repository directory
+
+function cdrr()
+{
+	local gitroot="$(git rev-parse --show-toplevel)"
+	[ -z "$gitroot" ] && return 1
+	while [ -n "$gitroot" ]; do
+		cd "$gitroot" || return 1
+		gitroot="$(git rev-parse --show-superproject-working-tree 2>/dev/null)"
+	done
+	return 0
+}
+
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # gh() - Open GitHub page of a repository from the terminal
 
