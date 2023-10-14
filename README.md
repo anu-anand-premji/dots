@@ -26,7 +26,7 @@ TODO:
 - Now, you can either:
 	- Source the `.bashrc` or `.zshenv` from `$HOME/.bashrc` or `$HOME/.zshenv`
   Or
-	- Symlink the `.bashrc` or `.zshenv` to `$HOME/<your-shellrc>` using:
+	- Replace the default `$HOME/.bashrc` or `$HOME/.zshenv` with a symlink to `$DOTFILE_DIR/<your-shellrc>` using:
 	  ```shell
 	  $ ln -sf "$HOME/repo/.config/shell/zsh/.zshenv" "$HOME/.zshenv"  # For ZSH
 	  $ ln -sf "$HOME/repo/.config/shell/bash/.bashrc" "$HOME/.bashrc" # For BASH
