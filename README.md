@@ -1,6 +1,6 @@
 # Dotfiles
 
-This repository contains my dotfiles.
+My dotfiles for Bash, Zsh, Git, Neovim. etc..
 
 ## 1. Shell Configuration
 
@@ -25,6 +25,7 @@ TODO:
   ```
 - Now, you can either:
 	- Source the `.bashrc` or `.zshenv` from `$HOME/.bashrc` or `$HOME/.zshenv`
+  Or
 	- Symlink the `.bashrc` or `.zshenv` to `$HOME/<your-shellrc>` using:
 	  ```shell
 	  $ ln -sf "$HOME/repo/.config/shell/zsh/.zshenv" "$HOME/.zshenv"  # For ZSH
@@ -43,9 +44,11 @@ Settings/functions for BASH and ZSH shells.
 |`.functions` | Shell functions that work across BASH & ZSH       |
 |`.bashrc`    | BASH configuration file                           |
 |`.bashprompt`| Custom BASH prompt                                |
-|`.zshprompt` | Custom ZSH prompt                                 |
-|`.zshrc`     | ZSH configuration file                            |
+|`.bashfzf`   | BASH keybindings with FZF dependency              |
 |`.zshenv`    | Sets ZDOTDIR and other global ZSH defaults        |
+|`.zshrc`     | ZSH configuration file                            |
+|`.zshprompt` | Custom ZSH prompt                                 |
+|`.zshfzf`    | ZSH keybindings with FZF dependency               |
 
 ### 1.4 Prompt
 
@@ -74,8 +77,8 @@ These are the keybindings that are currently defined across BASH and ZSH
 |------------|---------------------------------------------------------------|--------------|-----|------|
 | `Ctrl-R`   | Fuzzy search history and then paste the selected entry        | fzf          |  ✓  |  ✓   |
 | `Ctrl-T`   | Fuzzy search files & directories and paste the selected entry | fzf, fd-find |  ✓  |  ✓   |
-| `Up`       |                                                               | -            |  ✓  |  ✓   |
-| `Down`     |                                                               | -            |  ✓  |  ✓   |
+| `Up`       | Start typing + `Up` - fuzzy find history backward             |      -       |  ✓  |  ✓   |
+| `Down`     | Start typing + `Down` - fuzzy find history forward            |      -       |  ✓  |  ✓   |
 
 ### 1.6 Additional
 
