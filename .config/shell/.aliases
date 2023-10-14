@@ -7,8 +7,6 @@
 alias cls='clear';
 alias grep='grep -i --color=auto';
 alias ip='ip -color=auto';
-alias l='ls -lAFh --color=always --group-directories-first';
-alias ls='ls -AFh --color=always --group-directories-first';
 alias lsblk='lsblk -e7 -p -o NAME,SIZE,VENDOR,MODEL,SERIAL,LABEL,MOUNTPOINT,TYPE,FSTYPE';
 alias mkdir='mkdir -pv'; # create intermediate directories as needed
 alias mv='mv -iv';
@@ -34,6 +32,14 @@ alias tre='tree -aC -I '.git' --dirsfirst "$@" | less -FRNX';
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
+# Better ls with exa
+if _has exa; then
+	alias l='exa --oneline --all --group-directories-first --icons --sort=name --long --header --no-user';
+	alias ls='exa --all --group-directories-first --icons';
+else
+	alias l='ls -lAFh --color=always --group-directories-first';
+	alias ls='ls -AFh --color=always --group-directories-first';
+fi
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
