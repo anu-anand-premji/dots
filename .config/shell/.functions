@@ -81,34 +81,43 @@ function confirm()
 
 function detect_clipboard()
 {
-	if [[ "${OSTYPE}" == darwin* ]] && _has pbcopy && _has pbpaste; then
+	if [[ "${OSTYPE}" == darwin* ]] && __has pbcopy && __has pbpaste; then
+		# echo "1"
 		function clipcopy() { cat "${1:-/dev/stdin}" | pbcopy; }
 		function clippaste() { pbpaste; }
 
 	elif [[ "${OSTYPE}" == cygwin* || "${OSTYPE}" == msys* ]]; then
+		# echo "2"
 		function clipcopy() { cat "${1:-/dev/stdin}" > /dev/clipboard; }
 		function clippaste() { cat /dev/clipboard; }
 
 	elif _has clip.exe && _has powershell.exe; then
+		# echo "3"
 		function clipcopy() { cat "${1:-/dev/stdin}" | clip.exe; }
 		function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
 
+	elif [ -n "${WAYLAND_DISPLAY:-}" ] && __has wl-copy && __has wl-paste; then
+		# echo "4"
 		function clipcopy() { cat "${1:-/dev/stdin}" | wl-copy &>/dev/null &|; }
 		function clippaste() { wl-paste; }
 
-	elif [ -n "${DISPLAY:-}" ] && _has xsel; then
+	elif [ -n "${DISPLAY:-}" ] && __has xsel; then
+		# echo "5"
 		function clipcopy() { cat "${1:-/dev/stdin}" | xsel --clipboard --input; }
 		function clippaste() { xsel --clipboard --output; }
 
-	elif [ -n "${DISPLAY:-}" ] && _has xclip; then
+	elif [ -n "${DISPLAY:-}" ] && __has xclip; then
+		# echo "6"
 		function clipcopy() { cat "${1:-/dev/stdin}" | xclip -selection clipboard -in >/dev/null 2>&1; }
 		function clippaste() { xclip -out -selection clipboard; }
 
-	elif [[ $OSTYPE == linux-android* ]] && _has termux-clipboard-set; then
+	elif [[ $OSTYPE == linux-android* ]] && __has termux-clipboard-set; then
+		# echo "7"
 		function clipcopy() { cat "${1:-/dev/stdin}" | termux-clipboard-set; }
 		function clippaste() { termux-clipboard-get; }
 
-	elif [ -n "${TMUX:-}" ] && _has xclip; then
+	elif [ -n "${TMUX:-}" ] && __has xclip; then
+		# echo "8"
 		function clipcopy() { tmux load-buffer "${1:--}"; }
 		function clippaste() { tmux save-buffer -; }
 
