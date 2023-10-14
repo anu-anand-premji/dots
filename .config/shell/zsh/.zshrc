@@ -47,7 +47,7 @@ setopt clobber             # must use >| to truncate existing files
 if [ -d "$DOTFILE_DIR/../../../../Backup" ]; then HISTFILE="$DOTFILE_DIR/../../../../Backup/.zsh_history"; fi
 
 # Ignore certain commands from being stored in history
-export HISTORY_IGNORE="(ls|cd|cd -|df|ff|cls|reboot|restart|poweroff|pwd|exit|date|* --help|#*)"
+HISTORY_IGNORE="(ls|cd|cd -|df|ff|cls|reboot|restart|poweroff|pwd|exit|date|* --help|#*)"
 
 HISTSIZE=1000000000             # number of entries from the history file to be kept in memory for the current session
 SAVEHIST=1000000000             # number of entries that are stored in the history file
