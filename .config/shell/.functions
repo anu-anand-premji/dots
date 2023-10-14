@@ -200,24 +200,24 @@ function glg()
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
-# op() - fuzzy find a file or directory and then press:
-#      - ENTER    - cd to the selected entry
-#      - CTRL + V - open the selected entry in the default $VISUAL editor
-#      - CTRL + N - open the selected entry in the default $EDITOR
-#      - CTRL + O - open the selected entry in the default system app
-#      - CTRL + E - open the selected entry in the default file explorer
-#      - CTRL + Y - yank the selected entry to the clipboard
-#        For truncated entries, use ? key to toggle a preview window
+# ff() - Fuzzy find a file or directory and then press:
+#	   - ENTER    - cd to the selected entry
+#	   - CTRL + V - open the selected entry in the default $VISUAL editor
+#	   - CTRL + N - open the selected entry in the default $EDITOR
+#	   - CTRL + O - open the selected entry in the default system app
+#	   - CTRL + E - open the selected entry in the default file explorer
+#	   - CTRL + Y - yank the selected entry to the clipboard
+#		 For truncated entries, use ? key to toggle a preview window
 
 # Usage:
-# op <path/to/search>  (if invoked without a path, search under $HOME)
+# ff <path/to/search>  (if invoked without a path, search under $HOME)
 
 # Dependencies: fzf, fd/locate, copyabsolutepath()
 
 # TODO: For Ctrl-O, use a generic open_in_default_system_app() that works with bash,zsh,linux,wsl,macos
 # TODO: For Ctrl-E, use a generic open_in_default_files_app() that works with bash,zsh,linux,wsl,macos
 
-function op()
+function ff()
 {
 	# entries=("$(locate ${1:-~} |                                                                               \
 	entries=("$(fd -I --full-path --hidden --exclude ".git" --color=never . ${1:-~} |                          \
