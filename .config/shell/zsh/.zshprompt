@@ -26,12 +26,13 @@
 
 zmodload zsh/datetime
 
-prompt_preexec() {
-  preexec_timer=${EPOCHREALTIME}
+prompt_preexec()
+{
+	preexec_timer=${EPOCHREALTIME}
 }
 
-prompt_precmd() {
-
+prompt_precmd()
+{
 	# Before everything else, fetch the exit code of the previous command
 	typeset -gi LAST_EXIT_CODE=$?
 
@@ -51,9 +52,9 @@ prompt_precmd() {
 		fi
 		unset preexec_timer
 	else
-    # Clear previous result when hitting ENTER with no command to execute
-    unset prompt_elapsed_time
-  fi
+		# Clear previous result when hitting ENTER with no command to execute
+		unset prompt_elapsed_time
+	fi
 }
 
 setopt nopromptbang prompt{cr,percent,sp,subst}

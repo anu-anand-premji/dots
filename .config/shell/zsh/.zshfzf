@@ -13,6 +13,7 @@ export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border=rounded --info=r
 
 # Fuzzy search history and then paste the selected entry on to the ZSH shell
 # For truncated entries, use ? key to toggle a preview window
+
 function fzf_history_widget() {
 	local selected
 	if selected=$(fc -rl 1 | awk '{$1="";print substr($0,2)}' |
@@ -23,15 +24,22 @@ function fzf_history_widget() {
 	zle redisplay
 }
 
-# CTRL-R - fuzzy search history and then paste the selected entry on to the shell
+# CTRL-R - bound to fzf_history_widget()
 autoload -U  fzf_history_widget
 zle      -N  fzf_history_widget
 bindkey '^R' fzf_history_widget
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
-# Fuzzy search files & directories and then paste the selected entry at the cursor on the shell
-# For truncated entries, use ? key to toggle a preview window
+# Fuzzy search files & directories and then press
+#	- ENTER    - paste the selected entry
+#	- CTRL + V - open the selected entry in the default $VISUAL editor
+#	- CTRL + N - open the selected entry in the default $EDITOR
+#	- CTRL + O - open the selected entry in the default system app
+#	- CTRL + E - open the selected entry in the default file explorer
+#	- CTRL + Y - yank the selected entry to the clipboard
+#   For truncated entries, use ? key to toggle a preview window
+
 function fzf_file_widget() {
 
 	entries=("$(fd -I --full-path --hidden --exclude ".git" --color=never . / |                                 \
@@ -52,7 +60,7 @@ function fzf_file_widget() {
 	local ret=$?;zle reset-prompt; return $ret;
 }
 
-# CTRL-T - fuzzy search files & directories and then paste the selected entry on to the shell
+# CTRL-T - bound to fzf_file_widget()
 autoload -U  fzf_file_widget
 zle      -N  fzf_file_widget
 bindkey '^T' fzf_file_widget
