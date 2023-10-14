@@ -93,8 +93,7 @@ function detect_clipboard()
 		function clipcopy() { cat "${1:-/dev/stdin}" | clip.exe; }
 		function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
 
-	elif [ -n "${WAYLAND_DISPLAY:-}" ] && _has wl-copy && _has wl-paste; then
-		function clipcopy() { cat "${1:-/dev/stdin}" | wl-copy >/dev/null 2>&1; }
+		function clipcopy() { cat "${1:-/dev/stdin}" | wl-copy &>/dev/null &|; }
 		function clippaste() { wl-paste; }
 
 	elif [ -n "${DISPLAY:-}" ] && _has xsel; then
