@@ -279,15 +279,18 @@ function gh()
 
 # -------------------------------------------------------------------------------------------------------------------- #
 
-# oc() - Run a command from terminal, detach the process and then return to prompt without terminating the command
+# od() - Run a command, disown the process and then return to prompt without terminating the command
 
 # Usage:
-# oc meld ~/dotfiles ~/repo
+# od meld ~/dotfiles ~/repo
 
-oc() {
-    "$@" &
-    disown
-    return 0
+od()
+{
+	"$@" &
+	disown;
+	return 0;
+}
+
 }
 
 # -------------------------------------------------------------------------------------------------------------------- #

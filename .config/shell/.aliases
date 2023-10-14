@@ -61,6 +61,6 @@ alias todo='"$EDITOR" "$DOTFILE_DIR/../../../../Notes/todo.md"';
 alias edrc='"$VISUAL" "$DOTFILE_DIR/../../../"';
 
 # Diff dotfiles vs dotfiles on GitHub in Meld
-alias diffrc='oc meld "$DOTFILE_DIR/../../../../dotfiles" "$DOTFILE_DIR/../../../../dotfiles_git/dots"';
+alias diffrc='od meld "$DOTFILE_DIR/../../../../dotfiles" "$DOTFILE_DIR/../../../../dotfiles_git/dots"';
 
 # -------------------------------------------------------------------------------------------------------------------- #
