@@ -85,7 +85,10 @@ shopt -s checkwinsize # to line wrap, check window size after each command and u
 # Keybindings
 
 bind '"\e[A": history-search-backward' # Use up arrow to go backward in history search completion
+bind '"^[[A": history-search-backward' # Use up arrow to go backward in history search completion
 bind '"\e[B": history-search-forward'  # Use down arrow to go forward in history search completion
+bind '"^[[B": history-search-forward'  # Use down arrow to go forward in history search completion
+
 bind '"\eOC":forward-word'             # CTRL-RIGHT goes forward one word.
 bind '"\eOD":backward-word'            # CTRL-LEFT goes backward one word.
 bind -r "\C-s"                         # Disable CTRL-S from trigering forward-i-search
