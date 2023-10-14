@@ -2,7 +2,7 @@
 
 # Shell functions compatible with BASH & ZSH
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Overview
 # --------
@@ -23,7 +23,7 @@
 # update_snaps()     - Run updates for Snap package manager
 # do_update()        - Identify the distro-specific package manager and run system updates and cleanup
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # _has() - Check if a program is installed
 function _has()
@@ -37,7 +37,7 @@ function __has()
 	if ! _has $1; then echo "$1 not found."; return 1; fi
 }
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # confirm() - Confirm user input and based on it, proceed or abort the operation at hand
 
@@ -59,18 +59,18 @@ function confirm()
 	esac
 }
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # detect_clipboard() - Defines two clipboard functions, clipcopy() and clippaste(), based on the detected platform
 
 # clipcopy() - Copy data to clipboard
-#    <command> | clipcopy  - copies stdin to clipboard
-#    clipcopy <file>       - copies a file's contents to clipboard
+#	<command> | clipcopy  - copies stdin to clipboard
+#	clipcopy <file>       - copies a file's contents to clipboard
 
 # clippaste() - Paste data from clipboard to stdout
-#    clippaste             - paste clipboard's contents to stdout
-#    clippaste | <command> - pipe clipboard's content to another process
-#    clippaste > <file>    - paste contents to a file
+#	clippaste			  - paste clipboard's contents to stdout
+#	clippaste | <command> - pipe clipboard's content to another process
+#	clippaste > <file>    - paste contents to a file
 
 function detect_clipboard()
 {
@@ -111,7 +111,7 @@ function detect_clipboard()
 
 detect_clipboard;
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # copyabsolutepath() - Copy the absolute path of a given directory or file ($PWD if no parameter given) to the clipboard
 
@@ -131,7 +131,7 @@ function copyabsolutepath() {
 	echo ${(%):-"%B${file:a}%b copied to clipboard."}
 }
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # flog() - Fuzzy search git commits and then press:
 #		 - ENTER  - git show (what changed in that commit)
@@ -161,7 +161,7 @@ function flog()
 	done
 }
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # ff() - Fuzzy find a file or directory and then press:
 #	   - ENTER    - cd to the selected entry
@@ -200,7 +200,7 @@ function ff()
 	fi
 }
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # fkill() - Fuzzy find a process and kill it
 
@@ -240,7 +240,7 @@ function gh()
 	open $URL >/dev/null;
 )}
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # od() - Run a command, disown the process and then return to prompt without terminating the command
 
@@ -254,12 +254,13 @@ od()
 	return 0;
 }
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Update, upgrade and clean dnf, apt, flatpak and snap packages in your system
 
 # TODO
 # update_dnf() - Run updates for DNF package manager
+
 function update_dnf()
 {
 	return 0;
@@ -331,7 +332,7 @@ function do_update()
 	echo "Done. It's good practice to do a system reboot now."
 }
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Dependency check
 
@@ -344,4 +345,4 @@ if ! _has $VISUAL         ; then echo "VISUAL editor not set.";        fi
 if ! _has clipcopy        ; then echo "clipcopy() not found.";         fi
 if ! _has copyabsolutepath; then echo "copyabsolutepath() not found."; fi
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

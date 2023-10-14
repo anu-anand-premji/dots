@@ -5,7 +5,7 @@
 
 # Read http://mywiki.wooledge.org/BashFAQ/028 to know why we are doing this
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Set DOTFILE_DIR pointing to the location of the on-disk repository containing the dotfiles based on the OS
 if grep -qEi "(Microsoft|WSL)" /proc/version &>/dev/null; then
@@ -14,21 +14,21 @@ else
     export DOTFILE_DIR="$HOME/Dropbox/Docs/dotfiles/.config/shell/bash";
 fi
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # The global exports should be available to all programs, not just the interactive and login shells
 source "$DOTFILE_DIR/../.exports";
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 case $- in *i*) ;; *) return;; esac # don't do anything more if not an interactive shell
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # History
 
@@ -44,7 +44,7 @@ HISTCONTROL=ignoreboth   # don't put duplicate lines or lines starting with spac
 
 shopt -s histappend      # append to the history file, don't overwrite it
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Completion
 
@@ -61,7 +61,7 @@ if ! shopt -oq posix; then
     fi
 fi
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Flow Control
 
@@ -72,7 +72,7 @@ fi
 stty stop undef       # disable CTRL-S from stopping terminal output
 stty start undef      # disable Ctrl-Q from resuming terminal output
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Miscellaneous options
 
@@ -80,7 +80,7 @@ shopt -s autocd       # automatically do cd if the command is a path
 shopt -s cdspell      # autocorrect typos in path names when using `cd`
 shopt -s checkwinsize # to line wrap, check window size after each command and update the values of LINES and COLUMNS
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Keybindings
 
@@ -93,7 +93,7 @@ bind '"\eOC":forward-word'             # CTRL-RIGHT goes forward one word.
 bind '"\eOD":backward-word'            # CTRL-LEFT goes backward one word.
 bind -r "\C-s"                         # Disable CTRL-S from trigering forward-i-search
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Load custom prompt, aliases and functions
 
@@ -102,7 +102,7 @@ source "$DOTFILE_DIR/.bashfzf";
 source "$DOTFILE_DIR/../.aliases";
 source "$DOTFILE_DIR/../.functions";
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Notes
 
@@ -111,4 +111,4 @@ source "$DOTFILE_DIR/../.functions";
 # https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
 # https://unix.stackexchange.com/questions/32409/set-and-shopt-why-two
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

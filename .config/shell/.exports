@@ -1,15 +1,19 @@
-# Global exports for BASH & ZSH
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Global exports for BASH & ZSH                                                                                      ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# PATH
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Path                                                                                                               ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 if [ -d "$HOME/.bin" ]; then PATH="$HOME/.bin:$PATH"; fi
 if [ -d "$HOME/.local/bin" ]; then PATH="$HOME/.local/bin:$PATH"; fi
 if [ -d "$HOME/Applications" ]; then PATH="$HOME/Applications:$PATH"; fi
 if [ -d "/var/lib/flatpak/exports/bin/" ]; then PATH="/var/lib/flatpak/exports/bin/:$PATH"; fi
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ XDG Dirs                                                                                                           ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 # Clean up the $HOME directory
 # https://wiki.archlinux.org/title/XDG_Base_Directory
@@ -22,7 +26,10 @@ export XDG_DATA_HOME="$HOME/.local/share";
 export XDG_CACHE_HOME="$HOME/.cache";
 export XDG_STATE_HOME="$HOME/.local/state";
 
-# Misc
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ $HOME clean-up                                                                                                     ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
 alias kubectl='kubectl --cache-dir $XDG_CACHE_HOME/kube/http';
 alias nvidia-settings="nvidia-settings --config='$XDG_CONFIG_HOME'/nvidia/settings";
 alias svn='svn --config-dir $XDG_CONFIG_HOME/subversion';
@@ -71,14 +78,9 @@ export TEXMFVAR=$XDG_CACHE_HOME/texlive/texmf-var;
 export TMUX_TMPDIR="$XDG_RUNTIME_DIR"/tmux;
 export WGETRC="$XDG_CONFIG_HOME"/wget/wgetrc; mkdir -p "$XDG_CONFIG_HOME"/wget && touch $WGETRC;
 
-# Include environment configurations from DATA_HOME
-if [ -d "$XDG_DATA_HOME/environment.d" ]; then
-	for f in "$XDG_DATA_HOME/environment.d/"*; do source "$f"; done
-fi
-
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# Terminfo
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Terminfo                                                                                                           ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 export LESS_TERMCAP_mb=$(printf "\e[1;31m");
 export LESS_TERMCAP_md=$(printf "\e[1;31m");
@@ -88,11 +90,11 @@ export LESS_TERMCAP_so=$(printf "\e[1;44;33m");
 export LESS_TERMCAP_ue=$(printf "\e[0m");
 export LESS_TERMCAP_us=$(printf "\e[1;32m");
 
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# Editor
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Editor                                                                                                             ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 if command -v nvim >/dev/null 2>&1; then export EDITOR=nvim; else export EDITOR=vi; fi
 if command -v code >/dev/null 2>&1; then export VISUAL=code; else export VISUAL=$EDITOR; fi
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

@@ -1,12 +1,12 @@
-# This file is automatically sourced by ZSH after setting $ZDOTDIR in `$HOME/.zshenv` to point to this directory
-
-# -------------------------------------------------------------------------------------------------------------------- #
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ This file is automatically sourced by ZSH after setting $ZDOTDIR in `$HOME/.zshenv` to point to this directory     ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 case $- in *i*) ;; *) return;; esac # don't do anything more if not an interactive shell
 
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# Completion
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Completion                                                                                                         ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 autoload -Uz compinit      # load the function compinit in `$fpath' as soon as it is referenced for the first time
 compinit -d "$XDG_CACHE_HOME/.zcompdump"; # compsys is now online with a custom zcompdump location
@@ -29,9 +29,9 @@ zstyle ':completion:*' verbose yes;                          # use verbose mode 
 zstyle ':completion:*' menu select=2;                        # menu selection with 2 candidates or more
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' # case insensitive completion
 
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# Directory
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Directory                                                                                                          ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 setopt auto_cd             # if the command is a path, cd into it
 setopt chase_links         # resolve symlinks
@@ -39,9 +39,9 @@ setopt extended_glob       # consider `#', `~' and `^' characters as part of pat
 setopt glob_dots           # include dotfiles in globbing
 setopt clobber             # must use >| to truncate existing files
 
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# History
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ History                                                                                                            ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 # Store ZSH history at a custom location
 if [ -d "$DOTFILE_DIR/../../../../Backup" ]; then HISTFILE="$DOTFILE_DIR/../../../../Backup/.zsh_history"; fi
@@ -95,9 +95,9 @@ add-zsh-hook precmd save_last_command_in_history_if_successful
 add-zsh-hook zshexit save_last_command_in_history_if_successful
 add-zsh-hook zshaddhistory my_zshaddhistory
 
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# Flow Control
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Flow Control                                                                                                       ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 # 'CTRL-S' & 'CTRL-Q' keys do flow control by default by the system, not ZSH. The shell simply respects these settings.
 # Turn off system level control flow with 'stty -ixon' or un-defining 'stty start' or 'stty stop'.
@@ -107,9 +107,9 @@ stty stop undef                 # disable CTRL-S from stopping terminal output
 stty start undef                # disable Ctrl-Q from resuming terminal output
 setopt noflowcontrol            # disable flow control for ZSH
 
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# Various
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Various                                                                                                            ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 setopt interactivecomments      # allow comments in shell and stop interpreting them
 setopt no_print_exit_value      # do not print return value if non-zero
@@ -119,9 +119,9 @@ setopt no_hup                   # no hup signal at shell exit
 setopt no_ignore_eof            # do not exit on end-of-file
 setopt no_rm_star_silent        # ask for confirmation for `rm *' or `rm path/*'
 
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# Keybinds
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Keybinds                                                                                                           ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 # Start typing + [Up/Down] - fuzzy find history forward/backward
 if [[ "${terminfo[kcuu1]}" != "" ]]; then
@@ -153,7 +153,9 @@ bindkey '^H' backward-kill-word # CTRL-BACKSPACE deletes the previous word
 bindkey '5~' kill-word          # CTRL-DEL deletes the next word
 bindkey -r '^S'                 # Disable CTRL-S from triggering forward-i-search
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Extras                                                                                                             ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 # Load custom prompt, aliases, fzf key-binds, and other functions
 
@@ -163,9 +165,9 @@ source "$ZDOTDIR/../.functions";
 source "$ZDOTDIR/../.aliases";
 if [ -f "$ZDOTDIR/../../../../Backup/.extra" ]; then source "$ZDOTDIR/../../../../Backup/.extra"; fi
 
-# -------------------------------------------------------------------------------------------------------------------- #
-
-# Notes
+# ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║ Notes                                                                                                              ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 # Run `set -o` to  see all zsh config options and their current settings
 # Run `zsh -x` to see how ZSH startup with high verbosity
@@ -179,4 +181,4 @@ if [ -f "$ZDOTDIR/../../../../Backup/.extra" ]; then source "$ZDOTDIR/../../../.
 # Step 2: create a widget with the same name as the function you want to bind a key to.
 # Step 3: bind a key to the widget which calls the desired function.
 
-# -------------------------------------------------------------------------------------------------------------------- #
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
