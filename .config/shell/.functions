@@ -52,14 +52,18 @@ function __has()
 
 function confirm()
 {
-	local message="${1:-Are you sure you want to continue? [y/N]}"
-	if   [ -n "$ZSH_VERSION" ];  then read -q "REPLY?$message ";
-	elif [ -n "$BASH_VERSION" ]; then read -r -p "$message " REPLY; fi
+	local message="${1:-Are you sure you want to continue? [Y]es or [N]o and then press ENTER.}"
 
-	case "$REPLY" in
-		[yY][eE][sS]|[yY]) 	printf '\n'; return 0; ;;
-		*) 					printf '\n'; return 1; ;;
-	esac
+	while true; do
+		if   [ -n "$ZSH_VERSION" ];  then read "REPLY?$message ";
+		elif [ -n "$BASH_VERSION" ]; then read -r -p "$message " REPLY; fi
+
+		case "$REPLY" in
+			[yY][eE][sS]|[yY]) 	printf '\n'; return 0; ;;
+			[nN][oO]|[nN]) 		printf '\n'; return 1; ;;
+			*) 					printf '\nPlease reply with either [Y]es or [N]o.\n'; ;;
+		esac
+	done
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
