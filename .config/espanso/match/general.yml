@@ -37,6 +37,11 @@ matches:
     replace: "Anu Anand Premji$|$"
     word: true
 
+    # \n - insert new line
+  - triggers: [":re", ":Re", ":RE"]
+    replace: "Regards,\nAnu"
+    word: true
+
 ########################################################################################################################
 
  # Markdown
