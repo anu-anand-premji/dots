@@ -69,6 +69,65 @@ local open_cmd
 	${=open_cmd} "$@" &>/dev/null;
 }
 
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ detect_clipboard() - Defines two clipboard functions, clipcopy() and clippaste(), based on the detected platform    ║
+#║																													   ║
+#║ clipcopy() - Copy data to clipboard																				   ║
+#║	<command> | clipcopy  - copies stdin to clipboard																   ║
+#║	clipcopy <file>       - copies a file's contents to clipboard													   ║
+#║																													   ║
+#║ clippaste() - Paste data from clipboard to stdout																   ║
+#║	clippaste			  - paste clipboard's contents to stdout													   ║
+#║	clippaste | <command> - pipe clipboard's content to another process												   ║
+#║	clippaste > <file>    - paste contents to a file																   ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+function detect-clipboard() {
+  emulate -L zsh
+
+  if [[ "${OSTYPE}" == darwin* ]] && _has pbcopy && _has pbpaste; then
+    function clipcopy() { pbcopy < "${1:-/dev/stdin}"; }
+    function clippaste() { pbpaste; }
+  elif [[ "${OSTYPE}" == (cygwin|msys)* ]]; then
+    function clipcopy() { cat "${1:-/dev/stdin}" > /dev/clipboard; }
+    function clippaste() { cat /dev/clipboard; }
+  elif [ -n "${WAYLAND_DISPLAY:-}" ] && _has wl-copy && _has wl-paste; then
+    function clipcopy() { wl-copy < "${1:-/dev/stdin}"; }
+    function clippaste() { wl-paste; }
+  elif [ -n "${DISPLAY:-}" ] && _has xclip; then
+    function clipcopy() { xclip -in -selection clipboard < "${1:-/dev/stdin}"; }
+    function clippaste() { xclip -out -selection clipboard; }
+  elif [ -n "${DISPLAY:-}" ] && _has xsel; then
+    function clipcopy() { xsel --clipboard --input < "${1:-/dev/stdin}"; }
+    function clippaste() { xsel --clipboard --output; }
+  elif [ -n "${TMUX:-}" ] && _has tmux; then
+    function clipcopy() { tmux load-buffer "${1:--}"; }
+    function clippaste() { tmux save-buffer -; }
+  elif [[ $(uname -r) = *icrosoft* ]]; then
+    function clipcopy() { clip.exe < "${1:-/dev/stdin}"; }
+    function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
+  else
+    function _retry_clipboard_detection_or_fail() {
+      local clipcmd="${1}"; shift
+      if detect-clipboard; then
+        "${clipcmd}" "$@"
+      else
+        print "${clipcmd}: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
+        return 1
+      fi
+    }
+    function clipcopy() { _retry_clipboard_detection_or_fail clipcopy "$@"; }
+    function clippaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
+    return 1
+  fi
+}
+
+# Detect at startup. A non-zero exit here indicates that the dummy clipboards were set,
+# which is not really an error. If the user calls them, they will attempt to redetect
+# (for example, perhaps the user has now installed xclip) and then either print an error
+# or proceed successfully.
+detect-clipboard || true;
+
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # copyabsolutepath() - Copy the absolute path of a given directory or file ($PWD if no parameter given) to the clipboard
