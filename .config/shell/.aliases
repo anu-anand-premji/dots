@@ -60,7 +60,7 @@ alias which_shell="echo $(ps -p $$ -ocomm=)";
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Reload the current shell (https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#how-do-i-reload-the-zshrc-file)
-alias rerc='exec "$(ps -p $$ -ocomm=)"';
+alias rerc="exec "$(ps -p $$ -ocomm=)"";
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
@@ -85,12 +85,12 @@ alias g="git"
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Open ToDo list in the default $EDITOR
-alias todo='"$EDITOR" "$DOTFILE_DIR/../../../../Notes/todo.md"';
+alias todo=""$EDITOR" "$DOTFILE_DIR/../../../../Notes/todo.md"";
 
 # Edit shell config folder in the default $VISUAL editor
-alias edrc='"$VISUAL" "$DOTFILE_DIR/../"';
+alias edrc=""$VISUAL" "$DOTFILE_DIR/../"";
 
 # Diff dotfiles vs dotfiles on GitHub in Meld
-alias diffrc='od meld "$DOTFILE_DIR/../../../../dotfiles" "$DOTFILE_DIR/../../../../dotfiles_git/dots"';
+alias diffrc="od meld "$DOTFILE_DIR/../../../../dotfiles" "$HOME/repo/dotfiles_git/dots"";
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

@@ -2,28 +2,58 @@
 
 # Shell functions compatible with BASH & ZSH
 
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ Overview																											   ║
+#║ --------																											   ║
+#║ _has()             - Check if a program is installed																   ║
+#║ __has()            - Check if a program is installed and return a message if not found							   ║
+#║ confirm()          - Confirm user input and based on it, proceed or abort the operation at hand					   ║
 #║ open_command()     - Cross-platform open command																	   ║
+#║ detect_clipboard() - Defines two clipboard functions, clipcopy() and clippaste(), based on the detected platform	   ║
+#║ copyabsolutepath() - Copy the absolute path of a given directory/file ($PWD if no parameter given) to the clipboard ║
+#║ glog()             - Fuzzy search git commits																	   ║
+#║ gco()              - Fuzzy git checkout branch/tag																   ║
+#║ ga()               - Fuzzy git add																				   ║
+#║ ff()               - Fuzzy find a file or directory																   ║
+#║ fkill()            - Fuzzy find a process and kill it															   ║
+#║ cdrr()             - cd to the outermost git repository directory												   ║
+#║ gh()               - Open GitHub page of a repository from the terminal											   ║
+#║ od()               - Run a command, disown the process and then return to prompt without terminating the command	   ║
 #║ remove_spaces()    - Remove spaces recursively in folder and file names											   ║
+#║ update_dnf()       - Run updates for DNF package manager															   ║
+#║ update_apt()       - Run updates for APT package manager															   ║
+#║ update_flatpaks()  - Run updates for Flatpak package manager														   ║
+#║ update_snaps()     - Run updates for Snap package manager														   ║
+#║ do_update()        - Identify the distro-specific package manager and run system updates and cleanup				   ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ _has() - Check if a program is installed																			   ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
 function _has()
 {
 	command -v $1 >/dev/null 2>&1;
 }
 
-# __has() - Check if a program is installed and return a message if not found
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ __has() - Check if a program is installed and return a message if not found										   ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
 function __has()
 {
 	if ! _has $1; then echo "$1 not found."; return 1; fi
 }
 
-# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
-
-# confirm() - Confirm user input and based on it, proceed or abort the operation at hand
-
-# Usage (call with a prompt string or use a default):
-# - With custom user input:
-#		$ if confirm 'Install Software?'; then echo "Installing Software"; else echo "Cancelled"; fi
-# - Without user input (uses default message):
-#		$ if confirm; then echo "Done"; else echo "Cancelled"; fi
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ confirm() - Confirm user input and based on it, proceed or abort the operation at hand                              ║
+#║																								                       ║
+#║ Usage (call with a prompt string or use a default):											                       ║
+#║ - With custom user input:																	                       ║
+#║		$ if confirm 'Install Software?'; then echo "Installing Software"; else echo "Cancelled"; fi                   ║
+#║ - Without user input (uses default message):													                       ║
+#║		$ if confirm; then echo "Done"; else echo "Cancelled"; fi									                   ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 function confirm()
 {
@@ -131,25 +161,25 @@ detect-clipboard || true;
 
 # copyabsolutepath() - Copy the absolute path of a given directory or file ($PWD if no parameter given) to the clipboard
 
-# Dependencies: clipcopy
+# Dependencies: clipcopy()
 
 function copyabsolutepath() {
 	# If no argument passed, use current directory
-	local file="${1:-$PWD}"
+	local file="${1:-$PWD}";
 
 	# If argument is not an absolute path, prepend $PWD
-	[[ $file = /* ]] || file="$PWD/$file"
+	[[ $file = /* ]] || file="$PWD/$file";
 
 	# Copy the absolute path without resolving symlinks and if clipcopy fails, exit the function with an error
-	print -n "${file:a}" | clipcopy || return 1
+	print -n "${file:a}" | clipcopy || return 1;
 
 	# Message with the path in bold letters
-	echo ${(%):-"%B\"${file:a}\"%b copied to clipboard."}
+	echo ${(%):-"%B\"${file:a}\"%b copied to clipboard."};
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# flog() - Fuzzy search git commits and then press:
+# glog() - Fuzzy search git commits and then press:
 #		 - ENTER  - git show (what changed in that commit)
 #		 - CTRL-D - git diff (between that commit and ^HEAD)
 #		 - CTRL-Y - copy the commit id
@@ -158,11 +188,9 @@ function copyabsolutepath() {
 
 # Dependencies: git, fzf, awk, sed, clipcopy()
 
-function flog()
+function glog()
 {
-	if ! git rev-parse --git-dir > /dev/null 2>&1; then
-		echo -e "Not inside a Git repository. Exiting."; return;
-	fi;
+	if ! git rev-parse --git-dir > /dev/null 2>&1; then echo -e "Not inside a Git repository. Exiting."; return; fi;
 
 	local out shas sha q k
 	while out=$(git log --date=format:'%Y-%m-%d %a' --format=format:'%h  %ad  %<(16,trunc)%an  %>|(1)%s %d' "$@" |
@@ -174,7 +202,7 @@ function flog()
 		shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}');
 		[ -z "$shas" ] && continue
 		if   [ "$k" = ctrl-d ]; then git diff --color=always $shas;
-		elif [ "$k" = ctrl-y ]; then (echo -n $shas | clipcopy) && echo "$shas copied to clipboard." || return 1;
+		elif [ "$k" = ctrl-y ]; then (echo -n $shas | clipcopy) && (echo "$shas copied to clipboard.") || return 1;
 		elif [ "$k" = ctrl-h ]; then git checkout $shas;
 		else for sha in $shas; do git show --color=always $sha; done
 		fi
@@ -187,9 +215,7 @@ function flog()
 
 function gco()
 {
-	if ! git rev-parse --git-dir > /dev/null 2>&1; then
-		echo -e "Not inside a Git repository. Exiting."; return;
-	fi;
+	if ! git rev-parse --git-dir > /dev/null 2>&1; then echo -e "Not inside a Git repository. Exiting."; return; fi;
 
 	(git branch --all && git tag) | fzf | xargs git checkout;
 }
@@ -200,9 +226,7 @@ function gco()
 
 function ga()
 {
-	if ! git rev-parse --git-dir > /dev/null 2>&1; then
-		echo -e "Not inside a Git repository. Exiting."; return;
-	fi;
+	if ! git rev-parse --git-dir > /dev/null 2>&1; then echo -e "Not inside a Git repository. Exiting."; return; fi;
 
 	git diff --name-only --line-prefix=`git rev-parse --show-toplevel`/ | fzf | xargs git add -v;
 }
@@ -417,3 +441,4 @@ if ! _has clipcopy        ; then echo "clipcopy() not found.";         fi
 if ! _has copyabsolutepath; then echo "copyabsolutepath() not found."; fi
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+
