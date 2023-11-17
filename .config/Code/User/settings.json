@@ -1,5 +1,4 @@
 {
-    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: WebKit, IndentWidth: 4, ColumnLimit: 0}",
     "[makefile]": {
         "editor.insertSpaces": false
     },
@@ -11,13 +10,14 @@
         },
         "editor.wordWrap": "bounded"
     },
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: WebKit, IndentWidth: 4, ColumnLimit: 0}",
+    "cSpell.enabled": true,
     "cSpell.enableFiletypes": [
         "dockerfile",
         "groovy",
         "makefile",
         "shellscript"
     ],
-    "cSpell.enabled": true,
     "diffEditor.ignoreTrimWhitespace": false,
     "diffEditor.wordWrap": "on",
     "editor.accessibilitySupport": "off",
@@ -64,6 +64,7 @@
     "git.detectSubmodulesLimit": 30,
     "git.mergeEditor": true,
     "l13Diff.enablePreview": true,
+    "markdown-preview-enhanced.enableExtendedTableSyntax": true,
     "markdown-preview-github-styles.colorTheme": "system",
     "markdown.extension.list.indentationSize": "inherit",
     "markdown.preview.breaks": true,
@@ -124,16 +125,20 @@
     "terminal.integrated.scrollback": 1000000,
     "terminal.integrated.shellIntegration.enabled": true,
     "terminal.integrated.smoothScrolling": true,
-    "terminal.integrated.tabs.enabled": true,
+    "terminal.integrated.tabs.enabled": false,
+    "terminal.integrated.tabs.showActiveTerminal": "always",
     "trailing-spaces.trimOnSave": true,
     "typescript.disableAutomaticTypeAcquisition": true,
+    "vscode-markdown-github.theme.mode": "auto",
     "vsicons.dontShowNewVersionMessage": true,
     "window.autoDetectColorScheme": true,
     "window.commandCenter": true,
+    "window.density.editorTabHeight": "compact",
     "window.menuBarVisibility": "hidden",
     "window.title": "${dirty}${rootPath}",
     "window.titleBarStyle": "custom",
     "window.zoomLevel": -1,
+    "workbench.activityBar.location": "top",
     "workbench.colorCustomizations": {
         "[Github Light Theme - Gray]": {
             "activityBar.activeBackground": "#d8d8d8",
