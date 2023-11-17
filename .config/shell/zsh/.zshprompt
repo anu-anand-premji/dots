@@ -167,12 +167,12 @@ function set_prompt()
 	function prompt_color { [[ $LAST_EXIT_CODE -ne 0 ]] && echo "${red}" || echo "${green}" };
 
 	PS1='${bold}$(prompt_color)$(show_exit_symbol)${reset}'
-	PS1+='${bold}$(prompt_color)$(show_elapsed_time)${reset}'; # show elapsed time in seconds, if more than 2
+	PS1+='${bold}$(prompt_color)$(show_elapsed_time)${reset}'; # show elapsed time in an appropriate unit
 	PS1+=$'\n';                                                # newline
 	PS1+='${bold}${green}$(show_python_venv)${reset}';         # python venv
-	# PS1+='${bold}${green}${username}${reset}';               # username (%n)
-	# PS1+='${bold}${white}@${reset}';                         # @
-	# PS1+='${bold}${yellow}${hostname}${reset}';              # hostname (%m)
+	PS1+='${bold}${reset}${username}${reset}';                 # username (%n)
+	PS1+='${bold}${yellow}@${reset}';                          # @
+	PS1+='${bold}${reset}${hostname}${reset}';                 # hostname (%m)
 	PS1+='${bold}${blue}${pwd}${reset}';                       # working directory full path (%~) with folder icon
 	PS1+='${bold}${red}$(is_pwd_read_only)${reset}';           # read-only indicator
 	PS1+='${bold}${yellow}$(show_git_branch)${reset}';         # git branch name with branch icon
