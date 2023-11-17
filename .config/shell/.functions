@@ -3,8 +3,7 @@
 # Shell functions compatible with BASH & ZSH
 
 #║ open_command()     - Cross-platform open command																	   ║
-
-# _has() - Check if a program is installed
+#║ remove_spaces()    - Remove spaces recursively in folder and file names											   ║
 function _has()
 {
 	command -v $1 >/dev/null 2>&1;
@@ -314,6 +313,16 @@ od()
 	"$@" &
 	disown;
 	return 0;
+}
+
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+
+# remove_spaces() - remove spaces recursively in folder and file names
+
+function remove_spaces()
+{
+	find . -depth -name \'* *\' \
+	| while IFS= read -r f ; do mv -i \"$f\" \"$(dirname \"$f\")/$(basename \"$f\"|tr \' \' _)\" ; done
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
