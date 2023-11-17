@@ -44,8 +44,7 @@ fi
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Open current folder in the default files app
-# TODO: make it work on WSL as well using Windows File Explorer
-alias nnn='xdg-open "$PWD"';
+alias nnn="open_command "$PWD"";
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 

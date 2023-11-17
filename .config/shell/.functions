@@ -2,31 +2,7 @@
 
 # Shell functions compatible with BASH & ZSH
 
-# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
-
-# Overview
-# --------
-
-# _has()             - Check if a program is installed
-# __has()            - Check if a program is installed and return a message if not found
-# confirm()          - Confirm user input and based on it, proceed or abort the operation at hand
-# detect_clipboard() - Defines two clipboard functions, clipcopy() and clippaste(), based on the detected platform
-# copyabsolutepath() - Copy the absolute path of a given directory or file ($PWD if no parameter given) to the clipboard
-# flog()             - Fuzzy search git commits
-# gco()              - Fuzzy git checkout branch/tag
-# ga()               - Fuzzy git add
-# ff()               - Fuzzy find a file or directory
-# fkill()            - Fuzzy find a process and kill it
-# cdrr()             - cd to the outermost git repository directory
-# gh()               - Open GitHub page of a repository from the terminal
-# od()               - Run a command, disown the process and then return to prompt without terminating the command
-# update_dnf()       - Run updates for DNF package manager
-# update_apt()       - Run updates for APT package manager
-# update_flatpaks()  - Run updates for Flatpak package manager
-# update_snaps()     - Run updates for Snap package manager
-# do_update()        - Identify the distro-specific package manager and run system updates and cleanup
-
-# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+#║ open_command()     - Cross-platform open command																	   ║
 
 # _has() - Check if a program is installed
 function _has()
@@ -66,65 +42,32 @@ function confirm()
 	done
 }
 
-# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ open_command() - Cross-platform open command																		   ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# detect_clipboard() - Defines two clipboard functions, clipcopy() and clippaste(), based on the detected platform
-
-# clipcopy() - Copy data to clipboard
-#	<command> | clipcopy  - copies stdin to clipboard
-#	clipcopy <file>       - copies a file's contents to clipboard
-
-# clippaste() - Paste data from clipboard to stdout
-#	clippaste			  - paste clipboard's contents to stdout
-#	clippaste | <command> - pipe clipboard's content to another process
-#	clippaste > <file>    - paste contents to a file
-
-function detect_clipboard()
+function open_command()
 {
-	if [[ "${OSTYPE}" == darwin* ]] && __has pbcopy && __has pbpaste; then
-		# echo "1"
-		function clipcopy() { cat "${1:-/dev/stdin}" | pbcopy; }
-		function clippaste() { pbpaste; }
+local open_cmd
 
-	elif [[ "${OSTYPE}" == cygwin* || "${OSTYPE}" == msys* ]]; then
-		# echo "2"
-		function clipcopy() { cat "${1:-/dev/stdin}" > /dev/clipboard; }
-		function clippaste() { cat /dev/clipboard; }
+	case "$OSTYPE" in
+		darwin*)	open_cmd='open' ;;
 
-	elif _has clip.exe && _has powershell.exe; then
-		# echo "3"
-		function clipcopy() { cat "${1:-/dev/stdin}" | clip.exe; }
-		function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
+		cygwin*)	open_cmd='cygstart' ;;
 
-	elif [ -n "${WAYLAND_DISPLAY:-}" ] && __has wl-copy && __has wl-paste; then
-		# echo "4"
-		function clipcopy() { cat "${1:-/dev/stdin}" | wl-copy &>/dev/null &|; }
-		function clippaste() { wl-paste; }
+		linux*) 	if [[ $(uname -r) = *icrosoft* ]]; then
+						{ open_cmd='cmd.exe /c start ""'[[ -e "$1" ]] && { 1="$(wslpath -w "${1:a}")" || return 1 }};
+					else
+						open_cmd='nohup xdg-open';
+					fi ;;
 
-	elif [ -n "${DISPLAY:-}" ] && __has xsel; then
-		# echo "5"
-		function clipcopy() { cat "${1:-/dev/stdin}" | xsel --clipboard --input; }
-		function clippaste() { xsel --clipboard --output; }
+		msys*)  	open_cmd='start ""' ;;
 
-	elif [ -n "${DISPLAY:-}" ] && __has xclip; then
-		# echo "6"
-		function clipcopy() { cat "${1:-/dev/stdin}" | xclip -selection clipboard -in >/dev/null 2>&1; }
-		function clippaste() { xclip -out -selection clipboard; }
+		*)			echo "Platform $OSTYPE not supported"; return 1; ;;
+	esac
 
-	elif [[ $OSTYPE == linux-android* ]] && __has termux-clipboard-set; then
-		# echo "7"
-		function clipcopy() { cat "${1:-/dev/stdin}" | termux-clipboard-set; }
-		function clippaste() { termux-clipboard-get; }
-
-	elif [ -n "${TMUX:-}" ] && __has xclip; then
-		# echo "8"
-		function clipcopy() { tmux load-buffer "${1:--}"; }
-		function clippaste() { tmux save-buffer -; }
-
-	fi
+	${=open_cmd} "$@" &>/dev/null;
 }
-
-detect_clipboard;
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
