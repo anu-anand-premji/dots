@@ -99,8 +99,8 @@ bind -r "\C-s"                         # Disable CTRL-S from trigering forward-i
 
 source "$DOTFILE_DIR/.bashprompt";
 source "$DOTFILE_DIR/.bashfzf";
-source "$DOTFILE_DIR/../.aliases";
 source "$DOTFILE_DIR/../.functions";
+source "$DOTFILE_DIR/../.aliases";
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
