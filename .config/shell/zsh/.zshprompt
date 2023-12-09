@@ -1,21 +1,20 @@
-# Set a custom ZSH prompt
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ Set a custom ZSH prompt      																					   ║
+#║ 							      																					   ║
+#║ Install a nerd font to render all the characters in this file correctly - https://github.com/ryanoasis/nerd-fonts   ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Install a nerd font to render all the characters in this file correctly - https://github.com/ryanoasis/nerd-fonts
-
-# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
-
-# Overview
-# --------
-
-# is_in_git_submodule() - print "[submodule]" if inside a git submodule
-# is_pwd_read_only()    - show a  symbol after $PWD, if $PWD is read only
-# show_elapsed_time()   - display the duration of a command
-# show_git_branch()     - print the current git branch, shows if HEAD detached
-# show_git_stash()      - print the number of stashes, if any
-# show_python_venv()    - disable prompt mangling in venv/bin/activate and print the python venv name, if active
-# set_prompt()          - define a custom prompt using the above functions
-
-# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ Overview																											   ║
+#║ -------																											  -║
+#║ is_in_git_submodule() - print "[submodule]" if inside a git submodule											   ║
+#║ is_pwd_read_only()    - show a  symbol after $PWD, if $PWD is read only											   ║
+#║ show_elapsed_time()   - display the duration of a command														   ║
+#║ show_git_branch()     - print the current git branch, shows if HEAD detached										   ║
+#║ show_git_stash()      - print the number of stashes, if any														   ║
+#║ show_python_venv()    - disable prompt mangling in venv/bin/activate and print the python venv name, if active	   ║
+#║ set_prompt()          - define a custom prompt using the above functions											   ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 # Hooks
 
@@ -166,7 +165,7 @@ function set_prompt()
 	# LAST_EXIT_CODE is set in precmd()
 	function prompt_color { [[ $LAST_EXIT_CODE -ne 0 ]] && echo "${red}" || echo "${green}" };
 
-	PS1='${bold}$(prompt_color)$(show_exit_symbol)${reset}'
+	PS1='${bold}$(prompt_color)$(show_exit_symbol)${reset}'    # show  or  based on the exit code of last command
 	PS1+='${bold}$(prompt_color)$(show_elapsed_time)${reset}'; # show elapsed time in an appropriate unit
 	PS1+=$'\n';                                                # newline
 	PS1+='${bold}${green}$(show_python_venv)${reset}';         # python venv
