@@ -32,55 +32,124 @@ mkdir -p {"$HOME/.config","$HOME/.cache","$HOME/.local/share","$HOME/.local/stat
 #║ $HOME clean-up                                                                                                      ║
 #╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-alias kubectl="kubectl --cache-dir "$XDG_CACHE_HOME"/kube/http";
-alias nvidia-settings="nvidia-settings --config="$XDG_CONFIG_HOME"/nvidia/settings";
-alias svn="svn --config-dir "$XDG_CONFIG_HOME"/subversion";
-alias tmux="tmux -f "$XDG_CONFIG_HOME"/tmux/conf";
-alias wget="wget --hsts-file="$XDG_DATA_HOME"/wget-hsts";
-export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java;
-export _JAVA_OPTIONS=-Djavafx.cachedir="$XDG_CACHE_HOME"/openjfx;
-export ANDROID_SDK_HOME="$XDG_CONFIG_HOME"/android;
-export ANSIBLE_HOME="$XDG_CONFIG_HOME"/ansible;
-export ANSIBLE_CONFIG="$XDG_CONFIG_HOME"/ansible/ansible.cfg;
-export ANSIBLE_GALAXY_CACHE_DIR="$XDG_CACHE_HOME"/ansible/galaxy_cache;
-export ASPELL_CONF="home-dir $XDG_CONFIG_HOME/aspell/";
-export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config;
-export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME"/aws/credentials;
-export CARGO_HOME="$XDG_DATA_HOME"/cargo;
-export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker;
-export DOTNET_CLI_HOME="$XDG_CONFIG_HOME"/dotnet;
-export GIT_TEMPLATE_DIR="$XDG_CONFIG_HOME"/git/template;
-export GNUPGHOME="$XDG_CONFIG_HOME"/gnupg;
-export GOPATH="$XDG_DATA_HOME"/go;
-export GTK_RC_FILES="$XDG_CONFIG_HOME"/gtk-1.0/gtkrc;
-export GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc;
+# Android
+export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android";
+mkdir -p $ANDROID_SDK_HOME;
+
+# Ansible
+export ANSIBLE_HOME="$XDG_CONFIG_HOME/ansible";
+export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg";
+export ANSIBLE_GALAXY_CACHE_DIR="$XDG_CACHE_HOME/ansible/galaxy_cache";
+mkdir -p $ANSIBLE_HOME;
+mkdir -p $ANSIBLE_GALAXY_CACHE_DIR;
+
+# Aspell
+export ASPELL_CONF="$XDG_CONFIG_HOME/aspell";
+mkdir -p $ASPELL_CONF;
+
+# AWS
+export AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config";
+export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME/aws/credentials";
+mkdir -p "$XDG_CONFIG_HOME/aws";
+
+# Docker
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker";
+export MACHINE_STORAGE_PATH="$XDG_DATA_HOME/docker-machine";
+mkdir -p "$DOCKER_CONFIG";
+mkdir -p "$MACHINE_STORAGE_PATH";
+
+# Dotnet
+export DOTNET_CLI_HOME="$XDG_CONFIG_HOME/dotnet";
+mkdir -p "$DOTNET_CLI_HOME";
+
+# Git
+export GIT_TEMPLATE_DIR="$XDG_CONFIG_HOME/git/template";
+mkdir -p "$GIT_TEMPLATE_DIR";
+
+# GnuPG
+export GNUPGHOME="$XDG_CONFIG_HOME/gnupg";
+mkdir -p "$GNUPGHOME";
+
+# Go
+export GOPATH="$XDG_DATA_HOME/go";
+mkdir -p "$GOPATH";
+
+# GTK
+export GTK_RC_FILES="$XDG_CONFIG_HOME/gtk-1.0/gtkrc";
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc";
+mkdir -p "$XDG_CONFIG_HOME/gtk-1.0";
+mkdir -p "$XDG_CONFIG_HOME/gtk-2.0";
+
+# INPUTRC
 export INPUTRC="$XDG_CONFIG_HOME/bash/inputrc";
-export IPYTHONDIR="$XDG_CONFIG_HOME"/jupyter;
-export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter;
-export KUBECONFIG="$XDG_CONFIG_HOME"/kube/config;
-export LESSHISTFILE="$XDG_RUNTIME_DIR"/less/history;
+mkdir -p "$XDG_CONFIG_HOME/bash";
+
+# Java
+export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME/java";
+export _JAVA_OPTIONS=-Djavafx.cachedir="$XDG_CACHE_HOME/openjfx";
+mkdir -p "$XDG_CONFIG_HOME/java";
+mkdir -p "$XDG_CACHE_HOME/openjfx";
+
+# Kubernetes
+alias kubectl="kubectl --cache-dir $XDG_CACHE_HOME/kube/http";
+export KUBECONFIG="$XDG_CONFIG_HOME/kube/config";
+mkdir -p "$XDG_CACHE_HOME/kube";
+mkdir -p "$XDG_CONFIG_HOME/kube";
+
+# LaTeX
+export TEXMFCONFIG="$XDG_CONFIG_HOME/texlive/texmf-config";
+export TEXMFHOME="$XDG_DATA_HOME/texmf";
+export TEXMFVAR="$XDG_CACHE_HOME/texlive/texmf-var";
+mkdir -p "$XDG_CONFIG_HOME/texlive";
+mkdir -p "$XDG_DATA_HOME/texmf";
+mkdir -p "$XDG_CACHE_HOME/texlive";
+
+# Less
+export LESSHISTFILE="$XDG_RUNTIME_DIR/less/history";
 export LESSKEY="$XDG_CONFIG_HOME/less/keyfile.bin";
-export MACHINE_STORAGE_PATH="$XDG_DATA_HOME"/docker-machine;
-export npm_config_cache="$XDG_CACHE_HOME"/npm;
-export npm_config_devdir="$XDG_CACHE_HOME"/gyp;
-export npm_config_init_module="$XDG_CONFIG_HOME"/npm/config/npm-init.js;
-export npm_config_prefix="$XDG_DATA_HOME"/npm;
-export npm_config_tmp="$XDG_RUNTIME_DIR"/npm;
-export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME"/npm/npmrc;
-export PYLINTHOME="$XDG_CACHE_HOME"/pylint;
-export PYLINTRC="$XDG_CONFIG_HOME"/pylint/pylintrc;
+mkdir -p "$XDG_CONFIG_HOME/less";
+
+# Nvidia
+alias nvidia-settings="nvidia-settings --config=$XDG_CONFIG_HOME/nvidia/settings";
+
+# Python & Jupyter
+export IPYTHONDIR="$XDG_CONFIG_HOME/jupyter";
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter";
+export PYLINTHOME="$XDG_CACHE_HOME/pylint";
+export PYLINTRC="$XDG_CONFIG_HOME/pylint/pylintrc";
 export PYTHONHISTFILE="$XDG_CACHE_HOME/python_history";
+mkdir -p "$XDG_CONFIG_HOME/jupyter";
+mkdir -p "$XDG_CACHE_HOME/pylint";
+mkdir -p "$XDG_CONFIG_HOME/pylint";
+
+# Ripgrep
 export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/rg/config"
-export RUSTUP_HOME="$XDG_DATA_HOME"/rustup;
-export SPACEMACSDIR="$XDG_CONFIG_HOME"/spacemacs;
-export SQLITE_HISTORY=$XDG_DATA_HOME/sqlite_history;
-export TERMINFO_DIRS="$XDG_DATA_HOME"/terminfo:/usr/share/terminfo;
-export TERMINFO="$XDG_DATA_HOME"/terminfo;
-export TEXMFCONFIG=$XDG_CONFIG_HOME/texlive/texmf-config;
-export TEXMFHOME=$XDG_DATA_HOME/texmf;
-export TEXMFVAR=$XDG_CACHE_HOME/texlive/texmf-var;
-export TMUX_TMPDIR="$XDG_RUNTIME_DIR"/tmux;
-export WGETRC="$XDG_CONFIG_HOME"/wget/wgetrc; mkdir -p "$XDG_CONFIG_HOME"/wget && touch $WGETRC;
+mkdir -p "$XDG_CONFIG_HOME/rg";
+
+# Rust
+export CARGO_HOME="$XDG_DATA_HOME/cargo";
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup";
+mkdir -p "$CARGO_HOME";
+mkdir -p "$RUSTUP_HOME";
+
+# Subversion
+alias svn="svn --config-dir $XDG_CONFIG_HOME/subversion";
+
+# Terminfo
+export TERMINFO_DIRS="$XDG_DATA_HOME/terminfo:/usr/share/terminfo";
+export TERMINFO="$XDG_DATA_HOME/terminfo";
+mkdir -p "$XDG_DATA_HOME/terminfo";
+
+# Tmux
+alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/conf";
+export TMUX_TMPDIR="$XDG_RUNTIME_DIR/tmux";
+mkdir -p "$XDG_CONFIG_HOME/tmux";
+mkdir -p "$XDG_RUNTIME_DIR/tmux";
+
+# Wget
+export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc";
+alias wget="wget --hsts-file=$XDG_DATA_HOME/wget-hsts";
+mkdir -p "$XDG_CONFIG_HOME/wget";
 
 #╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 #║ Terminfo                                                                                                            ║
