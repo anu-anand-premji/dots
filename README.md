@@ -12,25 +12,42 @@ TODO:
 
 ### 1.2 Usage Instructions
 
-- Clone this repository. For clarity, the following instructions will assume the repo was cloned into `$HOME/repo/`
+- Clone this repository.
+- For clarity, the following instructions will assume the repo was cloned into `$HOME/repo/`
 - Open `$HOME/repo/.config/shell/bash/.bashrc` or `$HOME/repo/.config/shell/zsh/.zshenv` in a text editor
-- Set `$DOTFILE_DIR` to the directory which contains that `.bashrc` or `.zshenv` file. For example,
+- Set `$DOTFILE_DIR` to the directory which contains that `.bashrc` or `.zshenv` file.
+
   ```shell
   export DOTFILE_DIR="$HOME/repo/.config/shell/zsh";  # in .zshenv
   export DOTFILE_DIR="$HOME/repo/.config/shell/bash"; # in .bashrc
   ```
-- Install the fonts in `$HOME/repo/.config/fonts` to display the shell prompts properly
+
+- Install the fonts in `$HOME/repo/.config/fonts` to display all the characters in the shell prompt properly.
+
   ```
   $ cp -av "$HOME/repo/.config/fonts/." "$HOME/.local/share/fonts/"
   ```
+
+- Set the default font in your terminal to one of the nerd fonts installed in the previous step.
+
 - Now, you can either:
-	- Source the `.bashrc` or `.zshenv` from `$HOME/.bashrc` or `$HOME/.zshenv`
+
+  - Source the new config files from `$HOME/.bashrc` or `$HOME/.zshenv` by adding the following line to the default config file of your shell
+
+    ```shell
+    source "$HOME/repo/.config/shell/zsh/.zshenv"  # Add this to $HOME/.zshenv
+    source "$HOME/repo/.config/shell/bash/.bashrc" # Add this to $HOME/.bashrc
+    ```
+
   Or
-	- Replace the default `$HOME/.bashrc` or `$HOME/.zshenv` with a symlink to `$DOTFILE_DIR/<your-shellrc>` using:
-	  ```shell
-	  $ ln -sf "$HOME/repo/.config/shell/zsh/.zshenv" "$HOME/.zshenv"  # For ZSH
-	  $ ln -sf "$HOME/repo/.config/shell/bash/.bashrc" "$HOME/.bashrc" # For BASH
-	  ```
+
+  - Replace the default `$HOME/.bashrc` or `$HOME/.zshenv` with a symlink to `$DOTFILE_DIR/<your-shellrc>` using:
+
+    ```shell
+    $ ln -sf "$HOME/repo/.config/shell/zsh/.zshenv" "$HOME/.zshenv"  # For ZSH
+    $ ln -sf "$HOME/repo/.config/shell/bash/.bashrc" "$HOME/.bashrc" # For BASH
+    ```
+
 - Reload your shell and everything should now be working as expected
 
 ### 1.3 Files
@@ -80,6 +97,6 @@ These are the keybindings that are currently defined across BASH and ZSH
 | `Up`       | Start typing + `Up` - fuzzy find history backward             |      -       |  ✓  |  ✓   |
 | `Down`     | Start typing + `Down` - fuzzy find history forward            |      -       |  ✓  |  ✓   |
 
-### 1.6 Additional
+### 1.6 Extra
 
-- ZSH has an additional function where only valid commands gets stored in the history file
+- ZSH has an additional feature where only valid commands gets stored in the history file
