@@ -85,7 +85,7 @@ local open_cmd
 		cygwin*)	open_cmd='cygstart' ;;
 
 		linux*) 	if [[ $(uname -r) = *icrosoft* ]]; then
-						{ open_cmd='cmd.exe /c start ""'[[ -e "$1" ]] && { 1="$(wslpath -w "${1:a}")" || return 1 }};
+						open_cmd='wslview';
 					else
 						open_cmd='nohup xdg-open';
 					fi ;;
