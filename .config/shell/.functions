@@ -22,6 +22,7 @@
 #║ gh()               - Open GitHub page of a repository from the terminal                                             ║
 #║ od()               - Run a command, disown the process and then return to prompt without terminating the command    ║
 #║ remove_spaces()    - Remove spaces recursively in folder and file names                                             ║
+#║ tre()              - Better `tree` with colors, .git exclusion, hidden files                                        ║
 #║ update_dnf()       - Run updates for DNF package manager                                                            ║
 #║ update_apt()       - Run updates for APT package manager                                                            ║
 #║ update_flatpaks()  - Run updates for Flatpak package manager                                                        ║
@@ -362,6 +363,19 @@ remove_spaces()
 {
     find . -depth -name \'* *\' \
     | while IFS= read -r f ; do mv -i \"$f\" \"$(dirname \"$f\")/$(basename \"$f\"|tr \' \' _)\" ; done
+}
+
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+
+# tre() - Better `tree` with color, shows hidden files, ignores the `.git` directory and lists directories first.
+
+# Usage:
+# tre dir1 dir2
+
+tre()
+{
+    # The output gets piped into `less` with options to preserve color and line numbers, unless it fits in one screen.
+    tree -aC -I ".git" --dirsfirst "$@" | less -FRNX;
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
