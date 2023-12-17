@@ -22,7 +22,10 @@ if [ -d "/var/lib/flatpak/exports/bin/" ]; then PATH="/var/lib/flatpak/exports/b
 # https://github.com/b3nj5m1n/xdg-ninja
 
 # Create XDG directories if not there
-mkdir -p {"$HOME/.config","$HOME/.cache","$HOME/.local/share","$HOME/.local/state"}
+mkdir -p "$HOME/.config";
+mkdir -p "$HOME/.cache";
+mkdir -p "$HOME/.local/share";
+mkdir -p "$HOME/.local/state";
 
 # Define and export XDG variables without word splitting or pathname expansion
 : export "${XDG_CONFIG_HOME:="$HOME/.config"}";
