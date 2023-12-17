@@ -225,13 +225,13 @@ glog()
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# gco() - Fuzzy git checkout branch/tag
+# gco() - Fuzzy git checkout branch/tag/commit across all remotes
 
 gco()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository. Exiting.\n"; return; fi;
 
-    (git branch --all && git tag) | fzf | xargs git checkout;
+    (git branch --all && git tag && git log --all --pretty=format:"%h") | fzf | xargs git checkout;
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
