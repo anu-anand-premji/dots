@@ -172,7 +172,7 @@ LESS_TERMCAP_us="$(printf "\e[1;32m")"    && export LESS_TERMCAP_us;
 #║ Editor                                                                                                              ║
 #╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-if command -v nvim >/dev/null 2>&1; then EDITOR=nvim; else EDITOR=vi; fi && export EDITOR;
-if command -v code >/dev/null 2>&1; then VISUAL=code; else VISUAL=$EDITOR; fi && export VISUAL;
+if command -v nvim >/dev/null 2>&1; then EDITOR="nvim"; else EDITOR="vi"; fi && export EDITOR;
+if command -v code >/dev/null 2>&1; then VISUAL="code"; else VISUAL="$EDITOR"; fi && export VISUAL;
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
