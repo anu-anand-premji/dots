@@ -66,7 +66,7 @@ add-zsh-hook precmd prompt_precmd
 
 # Show "[submodule]" if inside a git submodule
 
-function is_in_git_submodule()
+is_in_git_submodule()
 {
 	[ ! -z "$(git rev-parse --show-superproject-working-tree 2>/dev/null)" ] && printf " [submodule]";
 }
@@ -75,7 +75,7 @@ function is_in_git_submodule()
 
 # Print a  symbol after $PWD, if $PWD is read only
 
-function is_pwd_read_only()
+is_pwd_read_only()
 {
 	[ ! -w "$PWD" ] && printf "";
 }
@@ -84,7 +84,7 @@ function is_pwd_read_only()
 
 # Display the duration of a command
 
-function show_elapsed_time()
+show_elapsed_time()
 {
 	# prompt_elapsed_time is calculated in precmd()
 	# as trailing '\n' are trimmed, add a non-printing last char ('\r')
@@ -95,7 +95,7 @@ function show_elapsed_time()
 
 # Display a tick if the last command succeeded, else display a cross
 
-function show_exit_symbol()
+show_exit_symbol()
 {
 	[[ $LAST_EXIT_CODE -ne 0 ]] && echo " " || echo "  "
 }
@@ -104,7 +104,7 @@ function show_exit_symbol()
 
 # Print the current git branch, shows if HEAD detached
 
-function show_git_branch()
+show_git_branch()
 {
 	if git rev-parse --git-dir > /dev/null 2>&1; then
 		printf " $(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')";
@@ -115,7 +115,7 @@ function show_git_branch()
 
 # Print the number of stashes, if any
 
-function show_git_stash()
+show_git_stash()
 {
 	if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
 		printf "  $(git stash list 2>/dev/null | wc -l)";
@@ -128,7 +128,7 @@ function show_git_stash()
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-function show_python_venv()
+show_python_venv()
 {
 	if [[ -v VIRTUAL_ENV ]]; then
 		printf " ${VIRTUAL_ENV##*/}\n\r"; # as trailing '\n' are trimmed, add a non-printing last char ('\r')
@@ -139,7 +139,7 @@ function show_python_venv()
 
 # Define a custom prompt using the above functions
 
-function set_prompt()
+set_prompt()
 {
 	setopt PROMPT_SUBST # parameter expansion, command substitution and arithmetic expansion are performed in prompts
 
@@ -163,7 +163,7 @@ function set_prompt()
 
 	# Change prompt symbol colour from green to red if the previous command failed
 	# LAST_EXIT_CODE is set in precmd()
-	function prompt_color { [[ $LAST_EXIT_CODE -ne 0 ]] && echo "${red}" || echo "${green}" };
+	prompt_color() { [[ $LAST_EXIT_CODE -ne 0 ]] && echo "${red}" || echo "${green}" };
 
 	PS1='${bold}$(prompt_color)$(show_exit_symbol)${reset}'    # show  or  based on the exit code of last command
 	PS1+='${bold}$(prompt_color)$(show_elapsed_time)${reset}'; # show elapsed time in an appropriate unit

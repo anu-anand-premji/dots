@@ -73,7 +73,7 @@ setopt no_hist_beep             # disable beep in ZLE when a widget attempts to 
 # By modifying these 3 hooks, we tell ZSH to not write the entry to history file when zshaddhistory() is called and
 # instead write it when precmd() or zshexit() is run, after checking whether the command was successful or not.
 
-function my_zshaddhistory() {
+my_zshaddhistory() {
 
 	# Remove line continuations since otherwise a "\" will eventually get written to history with no newline.
 	LASTHIST=${1//\\$'\n'/}
@@ -82,7 +82,7 @@ function my_zshaddhistory() {
 	return 2
 }
 
-function save_last_command_in_history_if_successful() {
+save_last_command_in_history_if_successful() {
 
 	# Write the last command if successful, using the history buffered by zshaddhistory().
 	if [[ ($? == 0 || $? == 130) && -n ${LASTHIST//[[:space:]\n]/} && -n $HISTFILE ]] ; then

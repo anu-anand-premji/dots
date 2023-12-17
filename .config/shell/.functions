@@ -33,7 +33,7 @@
 
 # _has() - Check if a program is installed
 
-function _has()
+_has()
 {
 	command -v $1 >/dev/null 2>&1;
 }
@@ -42,7 +42,7 @@ function _has()
 
 # __has() - Check if a program is installed and return a message if not found
 
-function __has()
+__has()
 {
 	if ! _has $1; then echo "$1 not found."; return 1; fi
 }
@@ -57,7 +57,7 @@ function __has()
 # - Without user input (uses default message):
 #		$ if confirm; then echo "Done"; else echo "Cancelled"; fi
 
-function confirm()
+confirm()
 {
 	local message="${1:-Are you sure you want to continue? [Y]es or [N]o and then press ENTER.}"
 
@@ -77,7 +77,7 @@ function confirm()
 
 # open_command() - Cross-platform open command
 
-function open_command()
+open_command()
 {
 	local open_cmd
 
@@ -115,40 +115,40 @@ function open_command()
 #	clippaste | <command> - pipe clipboard's content to another process
 #	clippaste > <file>    - paste contents to a file
 
-function detect-clipboard()
+detect-clipboard()
 {
 	emulate -L zsh
 
 	if [[ "${OSTYPE}" == darwin* ]] && _has pbcopy && _has pbpaste; then
-		function clipcopy()  { pbcopy < "${1:-/dev/stdin}"; }
-		function clippaste() { pbpaste; }
+		clipcopy()  { pbcopy < "${1:-/dev/stdin}"; }
+		clippaste() { pbpaste; }
 
 	elif [[ "${OSTYPE}" == (cygwin|msys)* ]]; then
-		function clipcopy()  { cat "${1:-/dev/stdin}" > /dev/clipboard; }
-		function clippaste() { cat /dev/clipboard; }
+		clipcopy()  { cat "${1:-/dev/stdin}" > /dev/clipboard; }
+		clippaste() { cat /dev/clipboard; }
 
 	elif [ -n "${WAYLAND_DISPLAY:-}" ] && _has wl-copy && _has wl-paste; then
-		function clipcopy()  { wl-copy < "${1:-/dev/stdin}"; }
-		function clippaste() { wl-paste; }
+		clipcopy()  { wl-copy < "${1:-/dev/stdin}"; }
+		clippaste() { wl-paste; }
 
 	elif [ -n "${DISPLAY:-}" ] && _has xclip; then
-		function clipcopy()  { xclip -in -selection clipboard < "${1:-/dev/stdin}"; }
-		function clippaste() { xclip -out -selection clipboard; }
+		clipcopy()  { xclip -in -selection clipboard < "${1:-/dev/stdin}"; }
+		clippaste() { xclip -out -selection clipboard; }
 
 	elif [ -n "${DISPLAY:-}" ] && _has xsel; then
-		function clipcopy()  { xsel --clipboard --input < "${1:-/dev/stdin}"; }
-		function clippaste() { xsel --clipboard --output; }
+		clipcopy()  { xsel --clipboard --input < "${1:-/dev/stdin}"; }
+		clippaste() { xsel --clipboard --output; }
 
 	elif [ -n "${TMUX:-}" ] && _has tmux; then
-		function clipcopy()  { tmux load-buffer "${1:--}"; }
-		function clippaste() { tmux save-buffer -; }
+		clipcopy()  { tmux load-buffer "${1:--}"; }
+		clippaste() { tmux save-buffer -; }
 
 	elif [[ $(uname -r) = *icrosoft* ]]; then
-		function clipcopy()  { clip.exe < "${1:-/dev/stdin}"; }
-		function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
+		clipcopy()  { clip.exe < "${1:-/dev/stdin}"; }
+		clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
 
 	else
-		function _retry_clipboard_detection_or_fail() {
+		_retry_clipboard_detection_or_fail() {
 			local clipcmd="${1}"; shift
 			if detect-clipboard; then
 				"${clipcmd}" "$@"
@@ -157,8 +157,8 @@ function detect-clipboard()
 				return 1
 			fi
 		}
-		function clipcopy() { _retry_clipboard_detection_or_fail clipcopy "$@"; }
-		function clippaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
+		clipcopy() { _retry_clipboard_detection_or_fail clipcopy "$@"; }
+		clippaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
 		return 1
 	fi
 }
@@ -175,7 +175,7 @@ detect-clipboard || true;
 
 # Dependencies: clipcopy()
 
-function copyabsolutepath() {
+copyabsolutepath() {
 	# If no argument passed, use current directory
 	local file="${1:-$PWD}";
 
@@ -200,7 +200,7 @@ function copyabsolutepath() {
 
 # Dependencies: git, fzf, awk, sed, clipcopy()
 
-function glog()
+glog()
 {
 	if ! git rev-parse --git-dir > /dev/null 2>&1; then echo -e "Not inside a Git repository. Exiting."; return; fi;
 
@@ -225,7 +225,7 @@ function glog()
 
 # gco() - Fuzzy git checkout branch/tag
 
-function gco()
+gco()
 {
 	if ! git rev-parse --git-dir > /dev/null 2>&1; then echo -e "Not inside a Git repository. Exiting."; return; fi;
 
@@ -236,7 +236,7 @@ function gco()
 
 # ga() - Fuzzy git add
 
-function ga()
+ga()
 {
 	if ! git rev-parse --git-dir > /dev/null 2>&1; then echo -e "Not inside a Git repository. Exiting."; return; fi;
 
@@ -262,7 +262,7 @@ function ga()
 # TODO: For Ctrl-O, use a generic open_in_default_system_app() that works with bash,zsh,linux,wsl,macos
 # TODO: For Ctrl-E, use a generic open_in_default_files_app() that works with bash,zsh,linux,wsl,macos
 
-function ff()
+ff()
 {
 	# entries=("$(locate ${1:-~} |                                                                               \
 	entries=("$(fd -I --full-path --hidden --exclude ".git" --color=never . ${1:-~} |                          \
@@ -288,7 +288,7 @@ function ff()
 
 # Dependencies: fzf, sed, awk
 
-function fkill()
+fkill()
 {
 	local pid
 
@@ -303,7 +303,7 @@ function fkill()
 
 # cdrr() - cd to the outermost git repository directory
 
-function cdrr()
+cdrr()
 {
 	local gitroot="$(git rev-parse --show-toplevel)"
 	[ -z "$gitroot" ] && return 1
@@ -325,7 +325,7 @@ function cdrr()
 
 # Dependencies: git, sed
 
-function gh()
+gh()
 {(
 	set -e;
 	git remote -v | grep push;
@@ -355,7 +355,7 @@ od()
 
 # remove_spaces() - remove spaces recursively in folder and file names
 
-function remove_spaces()
+remove_spaces()
 {
 	find . -depth -name \'* *\' \
 	| while IFS= read -r f ; do mv -i \"$f\" \"$(dirname \"$f\")/$(basename \"$f\"|tr \' \' _)\" ; done
@@ -368,13 +368,13 @@ function remove_spaces()
 # TODO
 # update_dnf() - Run updates for DNF package manager
 
-function update_dnf()
+update_dnf()
 {
 	return 0;
 }
 
 # update_apt() - Run updates for APT package manager
-function update_apt()
+update_apt()
 {
 	sudo apt update -qq;
 
@@ -401,7 +401,7 @@ function update_apt()
 }
 
 # update_flatpaks() - Run updates for Flatpak package manager
-function update_flatpaks()
+update_flatpaks()
 {
 	if ! __has flatpak; then return 1; fi
 	if ! confirm 'Start Flatpak update ? [y/N]'; then echo "Flatpak update Cancelled"; return 1; fi
@@ -417,7 +417,7 @@ function update_flatpaks()
 }
 
 # update_snaps() - Run updates for Snap package manager
-function update_snaps()
+update_snaps()
 {
 	if ! confirm 'Start Snap update ? [y/N]'; then echo "Snap update Cancelled"; return 1; fi
 	echo -e "\nStarting Snap update...\n";
@@ -427,7 +427,7 @@ function update_snaps()
 }
 
 # do_update() - Identify the distro-specific package manager and run system updates and cleanup
-function do_update()
+do_update()
 {
 	if [ -z "$(which apt-get 2>/dev/null)" ]; then echo -e "Not running Ubuntu. Exiting."; return 1; fi
 
@@ -453,4 +453,3 @@ if ! _has clipcopy        ; then echo "clipcopy() not found.";         fi
 if ! _has copyabsolutepath; then echo "copyabsolutepath() not found."; fi
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
-

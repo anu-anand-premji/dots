@@ -18,7 +18,7 @@
 
 # Show "[submodule]" if inside a git submodule
 
-function is_in_git_submodule()
+is_in_git_submodule()
 {
 	[ ! -z "$(git rev-parse --show-superproject-working-tree 2>/dev/null)" ] && printf " [submodule]";
 }
@@ -27,7 +27,7 @@ function is_in_git_submodule()
 
 # Print a  after $PWD, if $PWD is read only
 
-function is_pwd_read_only()
+is_pwd_read_only()
 {
 	[ ! -w "$PWD" ] && printf "";
 }
@@ -36,7 +36,7 @@ function is_pwd_read_only()
 
 # Function to parse and print the current git branch, shows if HEAD detached
 
-function show_git_branch()
+show_git_branch()
 {
 	if git rev-parse --git-dir > /dev/null 2>&1; then
 		printf " $(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/') ";
@@ -47,7 +47,7 @@ function show_git_branch()
 
 # Print the number of stashes, if any
 
-function show_git_stash()
+show_git_stash()
 {
 	if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
 		printf "  $(git stash list 2>/dev/null | wc -l)";
@@ -61,7 +61,7 @@ function show_git_stash()
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-function show_python_venv()
+show_python_venv()
 {
 	if [[ -v VIRTUAL_ENV ]]; then
 		printf " ${VIRTUAL_ENV##*/}\n\r"; # as trailing '\n' are trimmed, add a non-printing last char ('\r')
@@ -72,7 +72,7 @@ function show_python_venv()
 
 # Define a custom prompt using the above functions
 
-function set_prompt()
+set_prompt()
 {
 	# Define consistent colours & styles that can be used to customize the prompt
 	# Wrap tput output in \[ \] - helps bash to ignore non-printable characters and correctly calculate the prompt size.
