@@ -39,18 +39,18 @@ mkdir -p "$HOME/.local/state";
 
 # Android
 ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android" && export ANDROID_SDK_HOME;
-mkdir -p $ANDROID_SDK_HOME;
+mkdir -p "$ANDROID_SDK_HOME";
 
 # Ansible
 ANSIBLE_HOME="$XDG_CONFIG_HOME/ansible" && export ANSIBLE_HOME;
 ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg" && export ANSIBLE_CONFIG;
 ANSIBLE_GALAXY_CACHE_DIR="$XDG_CACHE_HOME/ansible/galaxy_cache" && export ANSIBLE_GALAXY_CACHE_DIR;
-mkdir -p $ANSIBLE_HOME;
-mkdir -p $ANSIBLE_GALAXY_CACHE_DIR;
+mkdir -p "$ANSIBLE_HOME";
+mkdir -p "$ANSIBLE_GALAXY_CACHE_DIR";
 
 # Aspell
 ASPELL_CONF="$XDG_CONFIG_HOME/aspell" && export ASPELL_CONF;
-mkdir -p $ASPELL_CONF;
+mkdir -p "$ASPELL_CONF";
 
 # AWS
 AWS_CONFIG_FILE="$XDG_CONFIG_HOME/aws/config" && export AWS_CONFIG_FILE;
