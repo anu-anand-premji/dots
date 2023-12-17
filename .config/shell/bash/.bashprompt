@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Set a custom BASH prompt
 
 # Install a nerd font to render all the characters in this file correctly - https://github.com/ryanoasis/nerd-fonts

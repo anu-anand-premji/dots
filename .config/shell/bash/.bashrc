@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # `.bashrc` is always loaded first and has to live at `$HOME/.bashrc`
 # So either source this file from `$HOME/.bashrc`
 # Or symlink this file using:

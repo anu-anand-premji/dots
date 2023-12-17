@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 # `.zshenv` is always loaded first and has to live at `$HOME/.zshenv`, and not in $ZDOTDIR
 # So either source this file from `$HOME/.zshenv`
 # Or symlink this file from your $ZDOTDIR using:
