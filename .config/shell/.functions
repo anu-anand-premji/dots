@@ -120,7 +120,7 @@ detect_clipboard()
 {
     emulate -L zsh
 
-    if [[ "${OSTYPE}" == "darwin*" ]] && _has pbcopy && _has pbpaste; then
+    if [ "${OSTYPE}" = "darwin*" ] && _has pbcopy && _has pbpaste; then
         clipcopy()  { pbcopy < "${1:-/dev/stdin}"; }
         clippaste() { pbpaste; }
 
@@ -144,7 +144,7 @@ detect_clipboard()
         clipcopy()  { tmux load-buffer "${1:--}"; }
         clippaste() { tmux save-buffer -; }
 
-    elif [[ "$(uname -r)" = "*icrosoft*" ]]; then
+    elif [ "$(uname -r)" = "*icrosoft*" ]; then
         clipcopy()  { clip.exe < "${1:-/dev/stdin}"; }
         clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
 
