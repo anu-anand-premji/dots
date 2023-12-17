@@ -12,22 +12,26 @@
 # Set DOTFILE_DIR to point to the on-disk directory containing the .zshrc file
 
 if grep -qEi "(Microsoft|WSL)" /proc/version &>/dev/null; then
-    export DOTFILE_DIR="$(wslpath -a "$(wslvar USERPROFILE)")/Dropbox/Docs/dotfiles/.config/shell/zsh";
+    DOTFILE_DIR="$(wslpath -a "$(wslvar USERPROFILE)")/Dropbox/Docs/dotfiles/.config/shell/zsh";
 else
-    export DOTFILE_DIR="$HOME/Dropbox/Docs/dotfiles/.config/shell/zsh";
+    DOTFILE_DIR="$HOME/Dropbox/Docs/dotfiles/.config/shell/zsh";
 fi
+
+export DOTFILE_DIR;
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Once we set $ZDOTDIR, ZSH will automatically source any `.zshrc` file in $ZDOTDIR
 
-export ZDOTDIR="${DOTFILE_DIR:-${HOME}}";
+ZDOTDIR="${DOTFILE_DIR:-${HOME}}";
+export ZDOTDIR;
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Prevent compinit initialization from creating `.zcompdump` in $ZDOTDIR from `/etc/zsh/.zshrc`
 
-export skip_global_compinit=1;
+skip_global_compinit=1;
+export skip_global_compinit;
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 

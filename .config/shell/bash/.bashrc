@@ -12,10 +12,12 @@
 # Set DOTFILE_DIR to point to the on-disk directory containing the .bashrc file
 
 if grep -qEi "(Microsoft|WSL)" /proc/version &>/dev/null; then
-    export DOTFILE_DIR="$(wslpath -a "$(wslvar USERPROFILE)")/Dropbox/Docs/dotfiles/.config/shell/bash";
+    DOTFILE_DIR="$(wslpath -a "$(wslvar USERPROFILE)")/Dropbox/Docs/dotfiles/.config/shell/bash";
 else
-    export DOTFILE_DIR="$HOME/Dropbox/Docs/dotfiles/.config/shell/bash";
+    DOTFILE_DIR="$HOME/Dropbox/Docs/dotfiles/.config/shell/bash";
 fi
+
+export DOTFILE_DIR;
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
@@ -38,7 +40,7 @@ case $- in *i*) ;; *) return;; esac # don't do anything more if not an interacti
 # History
 
 # Ignore certain commands from being stored in history
-export HIST_IGNORE="ls:cd:cd -:df:ff:cls:reboot:restart:poweroff:pwd:exit:date:* --help:#*";
+HIST_IGNORE="ls:cd:cd -:df:ff:cls:reboot:restart:poweroff:pwd:exit:date:* --help:#*" && export HIST_IGNORE;
 
 # Store BASH histroy at a custom location
 if [ -d "$DOTFILE_DIR/../../../../Backup" ]; then HISTFILE="$DOTFILE_DIR/../../../../Backup/.bash_history"; fi
@@ -53,7 +55,7 @@ shopt -s histappend      # append to the history file, don't overwrite it
 
 # Completion
 
-export BASH_COMPLETION_USER_FILE="$XDG_CONFIG_HOME"/bash-completion/bash_completion;
+BASH_COMPLETION_USER_FILE="$XDG_CONFIG_HOME"/bash-completion/bash_completion && export BASH_COMPLETION_USER_FILE;
 
 # Case insensitive tab completion in Bash
 # Or update ~/.inputrc to include `set completion-ignore-case on`

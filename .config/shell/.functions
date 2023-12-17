@@ -307,7 +307,9 @@ fkill()
 
 cdrr()
 {
-    local gitroot="$(git rev-parse --show-toplevel)"
+    local gitroot;
+    gitroot="$(git rev-parse --show-toplevel)";
+
     [ -z "$gitroot" ] && return 1;
 
     while [ -n "$gitroot" ]; do
