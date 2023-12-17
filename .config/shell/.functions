@@ -36,7 +36,7 @@
 
 _has()
 {
-    command -v $1 >/dev/null 2>&1;
+    command -v "$1" >/dev/null 2>&1;
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -45,7 +45,7 @@ _has()
 
 __has()
 {
-    if ! _has $1; then printf "$1 not found.\n"; return 1; fi
+    if ! _has "$1"; then printf "$1 not found.\n"; return 1; fi
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -120,11 +120,11 @@ detect_clipboard()
 {
     emulate -L zsh
 
-    if [[ "${OSTYPE}" == darwin* ]] && _has pbcopy && _has pbpaste; then
+    if [[ "${OSTYPE}" == "darwin*" ]] && _has pbcopy && _has pbpaste; then
         clipcopy()  { pbcopy < "${1:-/dev/stdin}"; }
         clippaste() { pbpaste; }
 
-    elif [[ "${OSTYPE}" == (cygwin|msys)* ]]; then
+    elif [[ "${OSTYPE}" == "(cygwin|msys)*" ]]; then
         clipcopy()  { cat "${1:-/dev/stdin}" > /dev/clipboard; }
         clippaste() { cat /dev/clipboard; }
 
@@ -144,7 +144,7 @@ detect_clipboard()
         clipcopy()  { tmux load-buffer "${1:--}"; }
         clippaste() { tmux save-buffer -; }
 
-    elif [[ $(uname -r) = *icrosoft* ]]; then
+    elif [[ "$(uname -r)" = "*icrosoft*" ]]; then
         clipcopy()  { clip.exe < "${1:-/dev/stdin}"; }
         clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
 
@@ -242,7 +242,7 @@ ga()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository. Exiting.\n"; return; fi;
 
-    git diff --name-only --line-prefix=`git rev-parse --show-toplevel`/ | fzf | xargs git add -v;
+    git diff --name-only --line-prefix="$(git rev-parse --show-toplevel)" | fzf | xargs git add -v;
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -298,7 +298,7 @@ fkill()
     else pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}');
     fi
 
-    if [ "x$pid" != "x" ]; then printf $pid | xargs kill -${1:-9}; fi
+    if [ "x$pid" != "x" ]; then printf $pid | xargs kill -"${1:-9}"; fi
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -336,9 +336,9 @@ gh()
     remote=${1:-origin};
     printf "Using remote %s\n" "$remote";
 
-    URL=$(git config remote.$remote.url | sed "s/git@\(.*\):\(.*\).git/https:\/\/\1\/\2/");
+    URL=$(git config remote."$remote".url | sed "s/git@\(.*\):\(.*\).git/https:\/\/\1\/\2/");
     printf "Opening %s\n" "$URL";
-    open $URL >/dev/null;
+    open "$URL" >/dev/null;
 )}
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -465,8 +465,8 @@ if ! _has fzf;              then printf "fzf not found.\n";                fi
 if ! _has git;              then printf "git not found.\n";                fi
 if ! _has sed;              then printf "sed not found.\n";                fi
 if ! _has awk;              then printf "awk not found.\n";                fi
-if ! _has $EDITOR;          then printf "EDITOR not set.\n";               fi
-if ! _has $VISUAL;          then printf "VISUAL editor not set.\n";        fi
+if ! _has "$EDITOR";        then printf "EDITOR not set.\n";               fi
+if ! _has "$VISUAL";        then printf "VISUAL editor not set.\n";        fi
 if ! _has confirm;          then printf "confirm() not found.\n";          fi
 if ! _has clipcopy;         then printf "clipcopy() not found.\n";         fi
 if ! _has copyabsolutepath; then printf "copyabsolutepath() not found.\n"; fi
