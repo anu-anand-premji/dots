@@ -176,7 +176,7 @@ set_prompt()
 
     # Change prompt symbol colour from green to red if the previous command failed
     # LAST_EXIT_CODE is set in precmd()
-    prompt_color() { [[ $LAST_EXIT_CODE -ne 0 ]] && echo "${red}" || echo "${green}" };
+    prompt_color() { [[ $LAST_EXIT_CODE -ne 0 ]] && printf "${red}" || printf "${green}" };
 
     PS1='${bold}$(prompt_color)$(show_exit_symbol)${reset}'    # show  or  based on the exit code of last command
     PS1+='${bold}$(prompt_color)$(show_elapsed_time)${reset}'; # show elapsed time in an appropriate unit
