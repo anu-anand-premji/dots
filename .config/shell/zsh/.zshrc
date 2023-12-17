@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 #╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-#║ This file is automatically sourced by ZSH after setting $ZDOTDIR in `$HOME/.zshenv` to point to this directory      ║
+#║ This file is automatically sourced by ZSH after setting $ZDOTDIR in `.zshenv` to point to this directory            ║
 #╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 case $- in *i*) ;; *) return;; esac # don't do anything more if not an interactive shell
@@ -10,7 +10,7 @@ case $- in *i*) ;; *) return;; esac # don't do anything more if not an interacti
 #║ Completion                                                                                                          ║
 #╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-autoload -Uz compinit      # load the function compinit in `$fpath' as soon as it is referenced for the first time
+autoload -Uz compinit      # load the compinit function in `$fpath' as soon as it is referenced for the first time
 compinit -d "$XDG_CACHE_HOME/.zcompdump"; # compsys is now online with a custom zcompdump location
 
 zmodload -i zsh/complist   # module that defines some widgets like menu-select
@@ -84,7 +84,8 @@ my_zshaddhistory() {
     return 2
 }
 
-save_last_command_in_history_if_successful() {
+save_last_command_in_history_if_successful() 
+{
 
     # Write the last command if successful, using the history buffered by zshaddhistory().
     if [[ ($? == 0 || $? == 130) && -n ${LASTHIST//[[:space:]\n]/} && -n $HISTFILE ]] ; then

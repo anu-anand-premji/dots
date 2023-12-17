@@ -12,6 +12,7 @@
 #║ is_in_git_submodule() - print "[submodule]" if inside a git submodule                                               ║
 #║ is_pwd_read_only()    - show a  symbol after $PWD, if $PWD is read only                                            ║
 #║ show_elapsed_time()   - display the duration of a command                                                           ║
+#║ show_exit_symbol()    - display a tick if the last command succeeded, else display a cross                          ║
 #║ show_git_branch()     - print the current git branch, shows if HEAD detached                                        ║
 #║ show_git_stash()      - print the number of stashes, if any                                                         ║
 #║ show_python_venv()    - disable prompt mangling in venv/bin/activate and print the python venv name, if active      ║
@@ -126,7 +127,7 @@ show_git_stash()
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# Disable prompt mangling in venv/bin/activate and show the python venv name, if active
+# Disable prompt mangling in venv/bin/activate and show the python venv name, if active, with a custom icon
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 

@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# `.bashrc` is always loaded first and has to live at `$HOME/.bashrc`
-# So either source this file from `$HOME/.bashrc`
-# Or symlink this file using:
-# ln -sf "<path/to/this/file>" "~/.bashrc"
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ .bashrc is always loaded first and has to live at `$HOME/.bashrc`                                                   ║
+#║ So either source this file from `$HOME/.bashrc`                                                                     ║
+#║ Or symlink this file using:                                                                                         ║
+#║ ln -sf "<path/to/this/file>" "~/.bashrc"                                                                            ║
+#║                                                                                                                     ║
+#║ Read http://mywiki.wooledge.org/BashFAQ/028 to know why we are doing this                                           ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Read http://mywiki.wooledge.org/BashFAQ/028 to know why we are doing this
+# Set DOTFILE_DIR to point to the on-disk directory containing the .bashrc file
 
-# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
-
-# Set DOTFILE_DIR pointing to the location of the on-disk repository containing the dotfiles based on the OS
 if grep -qEi "(Microsoft|WSL)" /proc/version &>/dev/null; then
     export DOTFILE_DIR="$(wslpath -a "$(wslvar USERPROFILE)")/Dropbox/Docs/dotfiles/.config/shell/bash";
 else
@@ -19,6 +20,7 @@ fi
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # The global exports should be available to all programs, not just the interactive and login shells
+
 source "$DOTFILE_DIR/../.exports";
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -27,7 +29,8 @@ case $- in *i*) ;; *) return;; esac # don't do anything more if not an interacti
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# make less more friendly for non-text input files, see lesspipe(1)
+# Make less more friendly for non-text input files, see lesspipe(1)
+
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

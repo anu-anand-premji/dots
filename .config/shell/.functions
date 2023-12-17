@@ -13,8 +13,8 @@
 #║ open_command()     - Cross-platform open command                                                                    ║
 #║ detect_clipboard() - Defines two clipboard functions, clipcopy() and clippaste(), based on the detected platform    ║
 #║ copyabsolutepath() - Copy the absolute path of a given directory/file ($PWD if no parameter given) to the clipboard ║
-#║ glog()             - Fuzzy search git commits                                                                       ║
-#║ gco()              - Fuzzy git checkout branch/tag                                                                  ║
+#║ glog()             - Fuzzy search git commits on the current branch                                                 ║
+#║ gco()              - Fuzzy git checkout branch/tag/commit across all remotes                                        ║
 #║ ga()               - Fuzzy git add                                                                                  ║
 #║ ff()               - Fuzzy find a file or directory                                                                 ║
 #║ fkill()            - Fuzzy find a process and kill it                                                               ║
@@ -95,7 +95,7 @@ open_command()
 
         msys*)      open_cmd='start ""' ;;
 
-        *)            printf "Platform $OSTYPE not supported. \n"; return 1; ;;
+        *)          printf "Platform $OSTYPE not supported.\n"; return 1; ;;
 
     esac
 
@@ -148,7 +148,8 @@ detect_clipboard()
         clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
 
     else
-        _retry_clipboard_detection_or_fail() {
+        _retry_clipboard_detection_or_fail()
+        {
             local clipcmd="${1}"; shift
             if detect_clipboard; then
                 "${clipcmd}" "$@"
@@ -182,7 +183,7 @@ copyabsolutepath() {
     # If argument is not an absolute path, prepend $PWD
     [[ $file = /* ]] || file="$PWD/$file";
 
-    # Copy the absolute path without resolving symlinks and if clipcopy fails, exit the function with an error
+    # Copy the absolute path without resolving symlinks and if clipcopy fails, exit with an error
     print -n "${file:a}" | clipcopy || return 1;
 
     # Message with the path in bold letters
@@ -191,7 +192,7 @@ copyabsolutepath() {
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# glog() - Fuzzy search git commits and then press:
+# glog() - Fuzzy search git commits on the current branch and then press:
 #          - ENTER  - git show (what changed in that commit)
 #          - CTRL-D - git diff (between that commit and ^HEAD)
 #          - CTRL-Y - copy the commit id
@@ -306,12 +307,14 @@ fkill()
 cdrr()
 {
     local gitroot="$(git rev-parse --show-toplevel)"
-    [ -z "$gitroot" ] && return 1
+    [ -z "$gitroot" ] && return 1;
+
     while [ -n "$gitroot" ]; do
-        cd "$gitroot" || return 1
-        gitroot="$(git rev-parse --show-superproject-working-tree 2>/dev/null)"
+        cd "$gitroot" || return 1;
+        gitroot="$(git rev-parse --show-superproject-working-tree 2>/dev/null)";
     done
-    return 0
+
+    return 0;
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -353,7 +356,7 @@ od()
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# remove_spaces() - remove spaces recursively in folder and file names
+# remove_spaces() - Remove spaces recursively in folder and file names
 
 remove_spaces()
 {
@@ -443,13 +446,13 @@ do_update()
 
 # Dependency check
 
-if ! _has fzf             ; then printf "fzf not found.\n";                fi
-if ! _has git             ; then printf "git not found.\n";                fi
-if ! _has sed             ; then printf "sed not found.\n";                fi
-if ! _has awk             ; then printf "awk not found.\n";                fi
-if ! _has $EDITOR         ; then printf "EDITOR not set.\n";               fi
-if ! _has $VISUAL         ; then printf "VISUAL editor not set.\n";        fi
-if ! _has clipcopy        ; then printf "clipcopy() not found.\n";         fi
+if ! _has fzf;              then printf "fzf not found.\n";                fi
+if ! _has git;              then printf "git not found.\n";                fi
+if ! _has sed;              then printf "sed not found.\n";                fi
+if ! _has awk;              then printf "awk not found.\n";                fi
+if ! _has $EDITOR;          then printf "EDITOR not set.\n";               fi
+if ! _has $VISUAL;          then printf "VISUAL editor not set.\n";        fi
+if ! _has clipcopy;         then printf "clipcopy() not found.\n";         fi
 if ! _has copyabsolutepath; then printf "copyabsolutepath() not found.\n"; fi
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

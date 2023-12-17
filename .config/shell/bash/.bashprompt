@@ -1,22 +1,21 @@
 #!/bin/bash
 
-# Set a custom BASH prompt
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ Set a custom BASH prompt                                                                                            ║
+#║                                                                                                                     ║
+#║ Install a nerd font to render all the characters in this file correctly - https://github.com/ryanoasis/nerd-fonts   ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Install a nerd font to render all the characters in this file correctly - https://github.com/ryanoasis/nerd-fonts
-
-# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
-
-# Overview
-# --------
-
-# is_in_git_submodule() - print "[submodule]" if inside a git submodule
-# is_pwd_read_only()    - show a  after $PWD, if $PWD is read only
-# show_git_branch()     - print the current git branch, shows if HEAD detached
-# show_git_stash()      - print the number of stashes, if any
-# show_python_venv()    - disable prompt mangling in venv/bin/activate and print the python venv name, if active
-# set_prompt()          - define a custom prompt using the above functions
-
-# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+#╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+#║ Overview                                                                                                            ║
+#║ -------                                                                                                             ║
+#║ is_in_git_submodule() - print "[submodule]" if inside a git submodule                                               ║
+#║ is_pwd_read_only()    - show a  after $PWD, if $PWD is read only                                                   ║
+#║ show_git_branch()     - print the current git branch, shows if HEAD detached                                        ║
+#║ show_git_stash()      - print the number of stashes, if any                                                         ║
+#║ show_python_venv()    - disable prompt mangling in venv/bin/activate and print the python venv name, if active      ║
+#║ set_prompt()          - define a custom prompt using the above functions                                            ║
+#╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 # Show "[submodule]" if inside a git submodule
 
@@ -36,7 +35,7 @@ is_pwd_read_only()
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# Function to parse and print the current git branch, shows if HEAD detached
+# Parse and print the current git branch, shows if HEAD detached
 
 show_git_branch()
 {
