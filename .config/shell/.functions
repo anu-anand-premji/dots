@@ -115,7 +115,7 @@ open_command()
 #	clippaste | <command> - pipe clipboard's content to another process
 #	clippaste > <file>    - paste contents to a file
 
-detect-clipboard()
+detect_clipboard()
 {
 	emulate -L zsh
 
@@ -150,7 +150,7 @@ detect-clipboard()
 	else
 		_retry_clipboard_detection_or_fail() {
 			local clipcmd="${1}"; shift
-			if detect-clipboard; then
+			if detect_clipboard; then
 				"${clipcmd}" "$@"
 			else
 				print "${clipcmd}: Platform $OSTYPE not supported or xclip/xsel not installed" >&2
@@ -167,7 +167,7 @@ detect-clipboard()
 # which is not really an error. If the user calls them, they will attempt to re-detect
 # (for example, perhaps the user has now installed xclip) and then either print an error
 # or proceed successfully.
-detect-clipboard || true;
+detect_clipboard || true;
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
