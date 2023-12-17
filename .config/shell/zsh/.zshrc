@@ -75,19 +75,19 @@ setopt no_hist_beep             # disable beep in ZLE when a widget attempts to 
 
 my_zshaddhistory() {
 
-	# Remove line continuations since otherwise a "\" will eventually get written to history with no newline.
-	LASTHIST=${1//\\$'\n'/}
+    # Remove line continuations since otherwise a "\" will eventually get written to history with no newline.
+    LASTHIST=${1//\\$'\n'/}
 
-	# Return 2 to save the history line on the internal history list, but not written to the history file
-	return 2
+    # Return 2 to save the history line on the internal history list, but not written to the history file
+    return 2
 }
 
 save_last_command_in_history_if_successful() {
 
-	# Write the last command if successful, using the history buffered by zshaddhistory().
-	if [[ ($? == 0 || $? == 130) && -n ${LASTHIST//[[:space:]\n]/} && -n $HISTFILE ]] ; then
-		print -sr -- ${=${LASTHIST%%'\n'}}
-	fi
+    # Write the last command if successful, using the history buffered by zshaddhistory().
+    if [[ ($? == 0 || $? == 130) && -n ${LASTHIST//[[:space:]\n]/} && -n $HISTFILE ]] ; then
+        print -sr -- ${=${LASTHIST%%'\n'}}
+    fi
 }
 
 autoload -U add-zsh-hook
@@ -128,13 +128,13 @@ if [[ "${terminfo[kcuu1]}" != "" ]]; then
     autoload -U up-line-or-beginning-search
     zle -N up-line-or-beginning-search
     bindkey "${terminfo[kcuu1]}" up-line-or-beginning-search
-	bindkey "^[[A" up-line-or-beginning-search
+    bindkey "^[[A" up-line-or-beginning-search
 fi
 if [[ "${terminfo[kcud1]}" != "" ]]; then
     autoload -U down-line-or-beginning-search
     zle -N down-line-or-beginning-search
     bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
-	bindkey "^[[B" down-line-or-beginning-search
+    bindkey "^[[B" down-line-or-beginning-search
 fi
 
 # Home & End Keys

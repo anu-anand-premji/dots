@@ -48,31 +48,31 @@ hi Conceal ctermbg=NONE ctermfg=NONE
 hi def link binaryNumber Number
 
 " XC extensions
-syn keyword	xcReserved	auto else return union
-syn keyword	xcReserved	break enum short unsigned
-syn keyword	xcReserved	case extern signed void
-syn keyword	xcReserved	char for sizeof volatile
-syn keyword	xcReserved	const if static while
-syn keyword	xcReserved	continue int struct
-syn keyword	xcReserved	default long switch
-syn keyword	xcReserved	do register typedef interface server client
+syn keyword    xcReserved    auto else return union
+syn keyword    xcReserved    break enum short unsigned
+syn keyword    xcReserved    case extern signed void
+syn keyword    xcReserved    char for sizeof volatile
+syn keyword    xcReserved    const if static while
+syn keyword    xcReserved    continue int struct
+syn keyword    xcReserved    default long switch
+syn keyword    xcReserved    do register typedef interface server client
 
-syn keyword	xcType		buffered par timer
-syn keyword	xcType		chan inline port transaction streaming
-syn keyword	xcType		chanend master select when
-syn keyword	xcType		clock slave 
+syn keyword    xcType        buffered par timer
+syn keyword    xcType        chan inline port transaction streaming
+syn keyword    xcType        chanend master select when
+syn keyword    xcType        clock slave
 
-syn keyword	xcPortType	in out
+syn keyword    xcPortType    in out
 
-syn keyword	xcFuture	accept claim goto proc
-syn keyword	xcFuture	asm double module restrict
-syn keyword	xcFuture	assert float on
+syn keyword    xcFuture    accept claim goto proc
+syn keyword    xcFuture    asm double module restrict
+syn keyword    xcFuture    assert float on
 
 syn keyword     Macro          combine combinable
 
 syn keyword     Type       timerafter pinseq pinsneq
 
-"syn match	xcIOOper	"<:\|:>\|@\|>>"
+"syn match    xcIOOper    "<:\|:>\|@\|>>"
 
 if version >= 508 || !exists("did_xc_syntax_inits")
   if version < 508
@@ -81,11 +81,11 @@ if version >= 508 || !exists("did_xc_syntax_inits")
   else
     command -nargs=+ HiLink hi def link <args>
   endif
-  HiLink xcReserved		Type
-  HiLink xcType			Type
-  HiLink xcPortType		Type
-  HiLink xcFuture		Keyword
-  HiLink xcIOOper		Operator
+  HiLink    xcReserved    Type
+  HiLink    xcType        Type
+  HiLink    xcPortType    Type
+  HiLink    xcFuture      Keyword
+  HiLink    xcIOOper      Operator
   delcommand HiLink
 endif
 

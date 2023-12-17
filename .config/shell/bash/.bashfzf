@@ -13,18 +13,18 @@ export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border=rounded --info=r
 
 # Utility function used to write the command to the shell
 writecmd() {
-	perl -e 'ioctl STDOUT, 0x5412, $_ for split //, do { chomp($_ = <>); $_ }'
+    perl -e 'ioctl STDOUT, 0x5412, $_ for split //, do { chomp($_ = <>); $_ }'
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Fuzzy search history and then paste the selected entry on to the shell
 fzf_history_widget() {
-	fc -rl 1                          |\
-	awk '{$1="";print substr($0,2)}'  |\
-	fzf +s --tac                      |\
-	sed -re 's/^\s*[0-9]+\s*//'       |\
-	writecmd
+    fc -rl 1                          |\
+    awk '{$1="";print substr($0,2)}'  |\
+    fzf +s --tac                      |\
+    sed -re 's/^\s*[0-9]+\s*//'       |\
+    writecmd
 }
 
 # CTRL-R - fuzzy search history and then paste the selected entry on to the shell
@@ -34,10 +34,10 @@ bind -m emacs-standard -x '"\C-r": fzf_history_widget'
 
 # Fuzzy search files & directories and then paste the selected entry on to the shell
 fzf_file_widget() {
-	locate /                          |\
-	fzf -m "$@"                       |\
-	sed -re 's/^\s*[0-9]+\s*//'       |\
-	writecmd
+    locate /                          |\
+    fzf -m "$@"                       |\
+    sed -re 's/^\s*[0-9]+\s*//'       |\
+    writecmd
 }
 
 # CTRL-T - fuzzy search files & directories and then paste the selected entry on to the shell

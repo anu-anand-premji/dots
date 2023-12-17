@@ -1,5 +1,5 @@
 #╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-#║ Set custom shell aliases for BASH & ZSH																			   ║
+#║ Set custom shell aliases for BASH & ZSH                                                                             ║
 #╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 # Better defaults with added verbosity
@@ -37,11 +37,11 @@ alias tre='tree -aC -I '.git' --dirsfirst "$@" | less -FRNX';
 # Better ls with exa
 
 if _has exa; then
-	alias l='exa --oneline --all --group-directories-first --icons --sort=name --long --header --no-user';
-	alias ls='exa --all --group-directories-first --icons';
+    alias l='exa --oneline --all --group-directories-first --icons --sort=name --long --header --no-user';
+    alias ls='exa --all --group-directories-first --icons';
 else
-	alias l='ls -lAFh --color=always --group-directories-first';
-	alias ls='ls -AFh --color=always --group-directories-first';
+    alias l='ls -lAFh --color=always --group-directories-first';
+    alias ls='ls -AFh --color=always --group-directories-first';
 fi
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
