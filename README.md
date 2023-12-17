@@ -24,7 +24,7 @@ TODO:
 
 - Install the fonts in `$HOME/repo/.config/fonts` to display all the characters in the shell prompt properly.
 
-  ```
+  ```shell
   $ cp -av "$HOME/repo/.config/fonts/." "$HOME/.local/share/fonts/"
   ```
 
