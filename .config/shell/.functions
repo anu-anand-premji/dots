@@ -397,12 +397,11 @@ update_dnf()
 # update_apt() - Run updates for APT package manager
 update_apt()
 {
+    if ! __has apt-get; then return 1; fi
+
+    printf "Checking for available Apt updates...\n";
     sudo apt update -qq;
-
-    printf "Checking for available apt updates...\n";
-
-    if __has aptitude; then aptitude search '~U';
-    else sudo apt-get -s dist-upgrade | awk '/^Inst/ { print $2 }'; fi
+    sudo apt-get -s dist-upgrade | awk '/^Inst/ { print $2 }';
 
     printf '\n';
 
@@ -425,6 +424,12 @@ update_apt()
 update_flatpaks()
 {
     if ! __has flatpak; then return 1; fi
+	
+	printf "Checking for available Flatpak updates...\n";
+    flatpak remote-ls --updates;
+
+    printf '\n';
+
     if ! confirm 'Start Flatpak update ? [y/N]'; then printf "Flatpak update cancelled.\n\n"; return 1; fi
 
     printf "\nStarting Flatpak update...\n";
@@ -440,7 +445,15 @@ update_flatpaks()
 # update_snaps() - Run updates for Snap package manager
 update_snaps()
 {
+    if ! __has snap; then return 1; fi
+	
+	printf "Checking for available Snap updates...\n";
+	sudo snap refresh --list
+
+    printf '\n';
+
     if ! confirm 'Start Snap update ? [y/N]'; then printf "Snap update cancelled.\n\n"; return 1; fi
+
     printf "\nStarting Snap update...\n";
     sudo snap refresh;
     printf "Snap update finished.\n";
@@ -449,10 +462,9 @@ update_snaps()
 # do_update() - Identify the distro-specific package manager and run system updates and cleanup
 do_update()
 {
-    if [ -z "$(which apt-get 2>/dev/null)" ]; then echo -e "Not running Ubuntu. Exiting."; return 1; fi
-
     printf "\nStarting system update...\n";
     update_apt; # TODO: check OS and call the correct package manager here
+	update_dnf; # TODO: check OS and call the correct package manager here
     update_flatpaks;
     update_snaps;
 
