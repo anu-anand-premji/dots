@@ -115,7 +115,7 @@ LESSKEY="$XDG_CONFIG_HOME/less/keyfile.bin" && export LESSKEY;
 mkdir -p "$XDG_CONFIG_HOME/less";
 
 # Nvidia
-alias nvidia-settings="nvidia-settings --config=$XDG_CONFIG_HOME/nvidia/settings";
+alias nvidia-settings='nvidia-settings --config="$XDG_CONFIG_HOME/nvidia/settings"';
 
 # Python & Jupyter
 IPYTHONDIR="$XDG_CONFIG_HOME/jupyter" && export IPYTHONDIR;
@@ -138,7 +138,7 @@ mkdir -p "$CARGO_HOME";
 mkdir -p "$RUSTUP_HOME";
 
 # Subversion
-alias svn="svn --config-dir $XDG_CONFIG_HOME/subversion";
+alias svn='svn --config-dir "$XDG_CONFIG_HOME/subversion"';
 
 # Terminfo
 TERMINFO_DIRS="$XDG_DATA_HOME/terminfo:/usr/share/terminfo" && export TERMINFO_DIRS;
@@ -146,14 +146,14 @@ TERMINFO="$XDG_DATA_HOME/terminfo" && export TERMINFO;
 mkdir -p "$XDG_DATA_HOME/terminfo";
 
 # Tmux
-alias tmux="tmux -f $XDG_CONFIG_HOME/tmux/conf";
+alias tmux='tmux -f "$XDG_CONFIG_HOME/tmux/conf"';
 TMUX_TMPDIR="$XDG_RUNTIME_DIR/tmux" && export TMUX_TMPDIR;
 mkdir -p "$XDG_CONFIG_HOME/tmux";
 mkdir -p "$XDG_RUNTIME_DIR/tmux";
 
 # Wget
 WGETRC="$XDG_CONFIG_HOME/wget/wgetrc" && export WGETRC;
-alias wget="wget --hsts-file=$XDG_DATA_HOME/wget-hsts";
+alias wget='wget --hsts-file="$XDG_DATA_HOME/wget-hsts"';
 mkdir -p "$XDG_CONFIG_HOME/wget";
 
 #╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗

@@ -43,14 +43,14 @@ fi
 
 # Open current folder in the default files app
 
-alias nnn="open_command $PWD";
+alias nnn='open_command "$PWD"';
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Show all saved WiFi Keys
 
 # TODO: using netsh, make it work on WSL also - possibly convert it to a script
-alias shwifi="sudo grep -r '^psk=' /etc/NetworkManager/system-connections/";
+alias shwifi='sudo grep -r "^psk=" /etc/NetworkManager/system-connections/';
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
@@ -63,7 +63,7 @@ alias which_shell='printf "$(ps -p $$ -ocomm=)\n"';
 # Reload the current shell
 
 # https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#how-do-i-reload-the-zshrc-file
-alias rerc="exec $(ps -p $$ -ocomm=)";
+alias rerc='exec "$(ps -p $$ -ocomm=)"';
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
@@ -87,19 +87,19 @@ alias sysinfo='sudo inxi -v 3';
 
 # Git
 
-alias g="git"
+alias g='git'
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Files
 
 # Open ToDo list in the default $EDITOR
-alias todo="$EDITOR $DOTFILE_DIR/../../../../Notes/todo.md";
+alias todo='"$EDITOR" "$DOTFILE_DIR/../../../../Notes/todo.md"';
 
 # Edit shell config folder in the default $VISUAL editor
-alias edrc="$VISUAL $DOTFILE_DIR/../";
+alias edrc='"$VISUAL" "$DOTFILE_DIR/../"';
 
 # Diff on-disk dotfiles vs dotfiles repo in Meld
-alias diffrc="od meld $DOTFILE_DIR/../../../../dotfiles $HOME/repo/dots";
+alias diffrc='od meld "$DOTFILE_DIR/../../../../dotfiles" "$HOME/repo/dots"';
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
