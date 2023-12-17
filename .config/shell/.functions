@@ -44,7 +44,7 @@ _has()
 
 __has()
 {
-	if ! _has $1; then echo "$1 not found."; return 1; fi
+	if ! _has $1; then printf "$1 not found.\n"; return 1; fi
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -95,7 +95,7 @@ open_command()
 
 		msys*)  	open_cmd='start ""' ;;
 
-		*)			echo "Platform $OSTYPE not supported"; return 1; ;;
+		*)			printf "Platform $OSTYPE not supported. \n"; return 1; ;;
 
 	esac
 
@@ -186,7 +186,7 @@ copyabsolutepath() {
 	print -n "${file:a}" | clipcopy || return 1;
 
 	# Message with the path in bold letters
-	echo ${(%):-"%B\"${file:a}\"%b copied to clipboard."};
+	printf ${(%):-"%B\"${file:a}\"%b copied to clipboard.\n"};
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -202,7 +202,7 @@ copyabsolutepath() {
 
 glog()
 {
-	if ! git rev-parse --git-dir > /dev/null 2>&1; then echo -e "Not inside a Git repository. Exiting."; return; fi;
+	if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository. Exiting.\n"; return; fi;
 
 	local out shas sha q k
 	while out=$(git log --date=format:'%Y-%m-%d %a' --format=format:'%h  %ad  %<(16,trunc)%an  %>|(1)%s %d' "$@" |
@@ -214,7 +214,7 @@ glog()
 		shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}');
 		[ -z "$shas" ] && continue
 		if   [ "$k" = ctrl-d ]; then git diff --color=always $shas;
-		elif [ "$k" = ctrl-y ]; then (echo -n $shas | clipcopy) && (echo "$shas copied to clipboard.") || return 1;
+		elif [ "$k" = ctrl-y ]; then (printf $shas | clipcopy) && (printf "$shas copied to clipboard.\n") || return 1;
 		elif [ "$k" = ctrl-h ]; then git checkout $shas;
 		else for sha in $shas; do git show --color=always $sha; done
 		fi
@@ -227,7 +227,7 @@ glog()
 
 gco()
 {
-	if ! git rev-parse --git-dir > /dev/null 2>&1; then echo -e "Not inside a Git repository. Exiting."; return; fi;
+	if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository. Exiting.\n"; return; fi;
 
 	(git branch --all && git tag) | fzf | xargs git checkout;
 }
@@ -238,7 +238,7 @@ gco()
 
 ga()
 {
-	if ! git rev-parse --git-dir > /dev/null 2>&1; then echo -e "Not inside a Git repository. Exiting."; return; fi;
+	if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository. Exiting.\n"; return; fi;
 
 	git diff --name-only --line-prefix=`git rev-parse --show-toplevel`/ | fzf | xargs git add -v;
 }
@@ -296,7 +296,7 @@ fkill()
 	else pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}');
 	fi
 
-	if [ "x$pid" != "x" ]; then echo $pid | xargs kill -${1:-9}; fi
+	if [ "x$pid" != "x" ]; then printf $pid | xargs kill -${1:-9}; fi
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -330,10 +330,10 @@ gh()
 	set -e;
 	git remote -v | grep push;
 	remote=${1:-origin};
-	echo "Using remote $remote";
+	printf "Using remote $remote\n";
 
 	URL=$(git config remote.$remote.url | sed "s/git@\(.*\):\(.*\).git/https:\/\/\1\/\2/");
-	echo "Opening $URL";
+	printf "Opening $URL\n";
 	open $URL >/dev/null;
 )}
 
@@ -378,12 +378,12 @@ update_apt()
 {
 	sudo apt update -qq;
 
-	echo -e "\nChecking for available apt updates...";
+	printf "Checking for available apt updates...\n";
 
 	if __has aptitude; then aptitude search '~U';
 	else sudo apt-get -s dist-upgrade | awk '/^Inst/ { print $2 }'; fi
 
-	echo
+	printf '\n';
 
 	if ! confirm 'Continue ? [y/N]'; then echo "Update Cancelled"; return 1; fi
 
@@ -404,25 +404,25 @@ update_apt()
 update_flatpaks()
 {
 	if ! __has flatpak; then return 1; fi
-	if ! confirm 'Start Flatpak update ? [y/N]'; then echo "Flatpak update Cancelled"; return 1; fi
+	if ! confirm 'Start Flatpak update ? [y/N]'; then printf "Flatpak update cancelled.\n\n"; return 1; fi
 
-	echo -e "\nStarting Flatpak update...\n";
+	printf "\nStarting Flatpak update...\n";
 	flatpak update -y;
 
-	echo -e "Doing Flatpak clean-up...\n";
+	printf "Doing Flatpak clean-up...\n";
 	flatpak uninstall --delete-data -y;
 	flatpak uninstall --unused -y;
 
-	echo "Flatpak update finished.\n";
+	printf "Flatpak update finished.\n";
 }
 
 # update_snaps() - Run updates for Snap package manager
 update_snaps()
 {
-	if ! confirm 'Start Snap update ? [y/N]'; then echo "Snap update Cancelled"; return 1; fi
-	echo -e "\nStarting Snap update...\n";
+	if ! confirm 'Start Snap update ? [y/N]'; then printf "Snap update cancelled.\n\n"; return 1; fi
+	printf "\nStarting Snap update...\n";
 	sudo snap refresh;
-	echo "Snap update finished.\n";
+	printf "Snap update finished.\n";
 
 }
 
@@ -431,25 +431,25 @@ do_update()
 {
 	if [ -z "$(which apt-get 2>/dev/null)" ]; then echo -e "Not running Ubuntu. Exiting."; return 1; fi
 
-	echo -e "\nStarting system update...";
+	printf "\nStarting system update...\n";
 	update_apt; # TODO: check OS and call the correct package manager here
 	update_flatpaks;
 	update_snaps;
 
-	echo "Done. It's good practice to do a system reboot now."
+	printf "Done. It's good practice to do a system reboot now.\n"
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # Dependency check
 
-if ! _has fzf             ; then echo "fzf not found.";                fi
-if ! _has git             ; then echo "git not found.";                fi
-if ! _has sed             ; then echo "sed not found.";                fi
-if ! _has awk             ; then echo "awk not found.";                fi
-if ! _has $EDITOR         ; then echo "EDITOR not set.";               fi
-if ! _has $VISUAL         ; then echo "VISUAL editor not set.";        fi
-if ! _has clipcopy        ; then echo "clipcopy() not found.";         fi
-if ! _has copyabsolutepath; then echo "copyabsolutepath() not found."; fi
+if ! _has fzf             ; then printf "fzf not found.\n";                fi
+if ! _has git             ; then printf "git not found.\n";                fi
+if ! _has sed             ; then printf "sed not found.\n";                fi
+if ! _has awk             ; then printf "awk not found.\n";                fi
+if ! _has $EDITOR         ; then printf "EDITOR not set.\n";               fi
+if ! _has $VISUAL         ; then printf "VISUAL editor not set.\n";        fi
+if ! _has clipcopy        ; then printf "clipcopy() not found.\n";         fi
+if ! _has copyabsolutepath; then printf "copyabsolutepath() not found.\n"; fi
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

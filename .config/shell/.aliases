@@ -61,7 +61,7 @@ alias shwifi="sudo grep -r '^psk=' /etc/NetworkManager/system-connections/";
 
 # Show the name of the current shell
 
-alias which_shell="echo $(ps -p $$ -ocomm=)";
+alias which_shell='printf "$(ps -p $$ -ocomm=)\n"';
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
