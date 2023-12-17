@@ -118,8 +118,6 @@ open_command()
 
 detect_clipboard()
 {
-    emulate -L zsh
-
     if [ "${OSTYPE}" = "darwin*" ] && _has pbcopy && _has pbpaste; then
         clipcopy()  { pbcopy < "${1:-/dev/stdin}"; }
         clippaste() { pbpaste; }
