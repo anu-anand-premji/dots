@@ -21,7 +21,7 @@
 
 is_in_git_submodule()
 {
-    [ ! -z "$(git rev-parse --show-superproject-working-tree 2>/dev/null)" ] && printf " [submodule]";
+    [ -n "$(git rev-parse --show-superproject-working-tree 2>/dev/null)" ] && printf " [submodule]";
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
