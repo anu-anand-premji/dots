@@ -39,8 +39,8 @@ is_pwd_read_only()
 
 show_git_branch()
 {
-    if git rev-parse --git-dir > /dev/null 2>&1; then
-        printf " $(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/') ";
+    if command git rev-parse --git-dir > /dev/null 2>&1; then
+        printf " %s" "$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/') ";
     fi;
 }
 
@@ -51,7 +51,7 @@ show_git_branch()
 show_git_stash()
 {
     if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
-        printf "  $(git stash list 2>/dev/null | wc -l)";
+        printf "  %s" "$(git stash list 2>/dev/null | wc -l)";
     fi
 }
 
@@ -65,7 +65,7 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 show_python_venv()
 {
     if [[ -v VIRTUAL_ENV ]]; then
-        printf " ${VIRTUAL_ENV##*/}\n\r"; # as trailing '\n' are trimmed, add a non-printing last char ('\r')
+        printf " %s\n\r" "${VIRTUAL_ENV##*/}"; # as trailing '\n' are trimmed, add a non-printing last char ('\r')
     fi
 }
 

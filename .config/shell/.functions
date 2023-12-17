@@ -333,10 +333,10 @@ gh()
     set -e;
     git remote -v | grep push;
     remote=${1:-origin};
-    printf "Using remote $remote\n";
+    printf "Using remote %s\n" "$remote";
 
     URL=$(git config remote.$remote.url | sed "s/git@\(.*\):\(.*\).git/https:\/\/\1\/\2/");
-    printf "Opening $URL\n";
+    printf "Opening %s\n" "$URL";
     open $URL >/dev/null;
 )}
 
