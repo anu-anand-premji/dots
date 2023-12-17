@@ -426,7 +426,6 @@ update_snaps()
     printf "\nStarting Snap update...\n";
     sudo snap refresh;
     printf "Snap update finished.\n";
-
 }
 
 # do_update() - Identify the distro-specific package manager and run system updates and cleanup
