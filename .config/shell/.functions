@@ -382,6 +382,8 @@ tre()
 
 # Update, upgrade and clean dnf, apt, flatpak and snap packages in your system
 
+# Dependencies: confirm()
+
 # TODO
 # update_dnf() - Run updates for DNF package manager
 
@@ -465,6 +467,7 @@ if ! _has sed;              then printf "sed not found.\n";                fi
 if ! _has awk;              then printf "awk not found.\n";                fi
 if ! _has $EDITOR;          then printf "EDITOR not set.\n";               fi
 if ! _has $VISUAL;          then printf "VISUAL editor not set.\n";        fi
+if ! _has confirm;          then printf "confirm() not found.\n";          fi
 if ! _has clipcopy;         then printf "clipcopy() not found.\n";         fi
 if ! _has copyabsolutepath; then printf "copyabsolutepath() not found.\n"; fi
 
