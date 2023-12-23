@@ -59,16 +59,14 @@ __has()
 
 confirm()
 {
-    local message="${1:-Are you sure you want to continue? [Y]es or [N]o and then press ENTER.}"
+    printf "%s\n" "${1:-Are you sure you want to continue? Reply with [Y]es or [N]o and then press ENTER.}";
 
     while true; do
-        if   [ -n "$ZSH_VERSION" ];  then read "REPLY?$message ";
-        elif [ -n "$BASH_VERSION" ]; then read -r -p "$message " REPLY; fi
-
+        read -r REPLY;
         case "$REPLY" in
-            [yY][eE][sS]|[yY])     return 0; ;;
-            [nN][oO]|[nN])         return 1; ;;
-            *)                     printf 'Please reply with either [Y]es or [N]o.\n'; ;;
+            [yY][eE][sS]|[yY])  return 0; ;;
+            [nN][oO]|[nN])      return 1; ;;
+            *)                  printf 'Please reply with either [Y]es or [N]o.\n'; ;;
         esac
     done
 }
