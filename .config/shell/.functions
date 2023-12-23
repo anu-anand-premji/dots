@@ -10,7 +10,8 @@
 #║ _has()             - Check if a program is installed                                                                ║
 #║ __has()            - Check if a program is installed and return a message if not found                              ║
 #║ confirm()          - Confirm user input and based on it, proceed or abort the operation at hand                     ║
-#║ open_command()     - Cross-platform open command                                                                    ║
+#║ open_command()     - Open the given dir/file in the default system across Linux, MacOS or WSL                       ║
+#║ open_path()        - Open the given dir/file in the default file explorer across Linux, MacOS or WSL                ║
 #║ detect_clipboard() - Defines two clipboard functions, clipcopy() and clippaste(), based on the detected platform    ║
 #║ copyabsolutepath() - Copy the absolute path of a given directory/file ($PWD if no parameter given) to the clipboard ║
 #║ glog()             - Fuzzy search git commits on the current branch                                                 ║
@@ -73,7 +74,7 @@ confirm()
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# open_command() - Cross-platform open command
+# open_command() - Open the given dir/file in the default system across Linux, MacOS or WSL
 
 open_command()
 {
@@ -94,6 +95,17 @@ open_command()
     esac
 
     ${=open_cmd} "$@" >/dev/null 2>&1;
+}
+
+# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
+
+# open_path() - Open the given dir/file in the default file explorer across Linux, MacOS or WSL
+
+# Dependencies: open_command()
+
+open_path()
+{
+    if [ -d "$sel" ]; then open_command "$sel"; else open_command "$(dirname "$sel")"; fi
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -228,7 +240,7 @@ gco()
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # ga() - Fuzzy git add
-
+# TODO: FIX: Doesn't seem to work for files in the git root. Example README files
 ga()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
@@ -250,10 +262,7 @@ ga()
 # Usage:
 # ff <path/to/search>  (if invoked without a path, search under $HOME)
 
-# Dependencies: fzf, fd/locate, copyabsolutepath()
-
-# TODO: For Ctrl-O, use a generic open_in_default_system_app() that works with bash,zsh,linux,wsl,macos
-# TODO: For Ctrl-E, use a generic open_in_default_files_app() that works with bash,zsh,linux,wsl,macos
+# Dependencies: fzf, fd/locate, copyabsolutepath(), open_command(), open_path()
 
 ff()
 {
@@ -266,12 +275,12 @@ ff()
     key="$(head -1 <<< "${entries[@]}")";
     sel="$(head -2 <<< "${entries[@]}" | tail -1)" || return;
 
-    if   [[ "$key" == ctrl-o ]]; then open "$sel";
+    if   [[ "$key" == ctrl-o ]]; then open_command "$sel";
     elif [[ "$key" == ctrl-v ]]; then "$VISUAL" "$sel";
     elif [[ "$key" == ctrl-n ]]; then "$EDITOR" "$sel";
-    elif [[ "$key" == ctrl-e ]]; then if [[ -d "$sel" ]]; then xdg-open "$sel"; else xdg-open "$(dirname "$sel")"; fi
+    elif [[ "$key" == ctrl-e ]]; then open_path "$sel";
     elif [[ "$key" == ctrl-y ]]; then copyabsolutepath "$(printf "%s" "$sel")";
-    elif [[ -d "$sel" ]] ; then cd "$sel"; else cd "$(dirname "$sel")";
+    elif [[ -d "$sel" ]] ;       then cd "$sel"; else cd "$(dirname "$sel")";
     fi
 }
 
@@ -469,5 +478,7 @@ if ! _has "$VISUAL";        then printf "VISUAL editor not set.\n";        fi
 if ! _has confirm;          then printf "confirm() not found.\n";          fi
 if ! _has clipcopy;         then printf "clipcopy() not found.\n";         fi
 if ! _has copyabsolutepath; then printf "copyabsolutepath() not found.\n"; fi
+if ! _has open_command;     then printf "open_command() not found.\n";     fi
+if ! _has open_path;        then printf "open_path() not found.\n";        fi
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
