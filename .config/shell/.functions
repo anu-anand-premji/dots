@@ -21,7 +21,6 @@
 #║ cdrr()             - cd to the outermost git repository directory                                                   ║
 #║ gh()               - Open GitHub page of a repository from the terminal                                             ║
 #║ od()               - Run a command, disown the process and then return to prompt without terminating the command    ║
-#║ remove_spaces()    - Remove spaces recursively in folder and file names                                             ║
 #║ tre()              - Better `tree` with colors, .git exclusion, hidden files                                        ║
 #║ update_dnf()       - Run updates for DNF package manager                                                            ║
 #║ update_apt()       - Run updates for APT package manager                                                            ║
@@ -349,16 +348,6 @@ od()
     "$@" &
     disown;
     return 0;
-}
-
-# ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
-
-# remove_spaces() - Remove spaces recursively in folder and file names
-
-remove_spaces()
-{
-    find . -depth -name \'* *\' \
-    | while IFS= read -r f ; do mv -i \"$f\" \"$(dirname \"$f\")/$(basename \"$f\"|tr \' \' _)\" ; done
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
