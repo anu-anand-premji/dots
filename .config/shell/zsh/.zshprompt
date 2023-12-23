@@ -11,7 +11,7 @@
 #║ -------                                                                                                             ║
 #║ is_in_git_submodule() - print "[submodule]" if inside a git submodule                                               ║
 #║ is_pwd_read_only()    - show a  symbol after $PWD, if $PWD is read only                                            ║
-#║ show_elapsed_time()   - display the duration of a command                                                           ║
+#║ show_cmd_duration()   - display the previous command duration in an appropriate unit                                ║
 #║ show_exit_symbol()    - display a tick if the last command succeeded, else display a cross                          ║
 #║ show_git_branch()     - print the current git branch, shows if HEAD detached                                        ║
 #║ show_git_stash()      - print the number of stashes, if any                                                         ║
@@ -85,9 +85,9 @@ is_pwd_read_only()
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# Display the duration of a command
+# Display the duration of the previous command in an appropriate unit
 
-show_elapsed_time()
+show_cmd_duration()
 {
     # prompt_elapsed_time is calculated in precmd()
     # as trailing '\n' are trimmed, add a non-printing last char ('\r')
@@ -175,7 +175,7 @@ set_prompt()
     prompt_color() { [ $LAST_EXIT_CODE -ne 0 ] && echo "${red}" || echo "${green}" };
 
     PS1='${bold}$(prompt_color)$(show_exit_symbol)${reset}'    # show  or  based on the exit code of last command
-    PS1+='${bold}$(prompt_color)$(show_elapsed_time)${reset}'; # show elapsed time in an appropriate unit
+    PS1+='${bold}$(prompt_color)$(show_cmd_duration)${reset}'; # show previous command duration in an appropriate unit
     PS1+=$'\n';                                                # newline
     PS1+='${bold}${green}$(show_python_venv)${reset}';         # python venv
     PS1+='${bold}${reset}${username}${reset}';                 # username (%n)
