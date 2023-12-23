@@ -45,7 +45,7 @@ _has()
 
 __has()
 {
-    if ! _has "$1"; then printf "$1 not found.\n"; return 1; fi
+    if ! _has "$1"; then printf "%s not found.\n" "$1"; return 1; fi
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -80,27 +80,23 @@ confirm()
 
 open_command()
 {
-    local open_cmd
+    local open_cmd;
 
     case "$OSTYPE" in
 
         darwin*)    open_cmd='open' ;;
 
-        cygwin*)    open_cmd='cygstart' ;;
-
-        linux*)     if [[ $(uname -r) = *icrosoft* ]]; then
+        linux*)     if [ "$(uname -r)" = "*icrosoft*" ]; then
                         open_cmd='wslview';
                     else
                         open_cmd='nohup xdg-open';
                     fi ;;
 
-        msys*)      open_cmd='start ""' ;;
-
-        *)          printf "Platform $OSTYPE not supported.\n"; return 1; ;;
+        *)          printf "Platform %s not supported.\n" "$OSTYPE "; return 1; ;;
 
     esac
 
-    ${=open_cmd} "$@" &>/dev/null;
+    ${=open_cmd} "$@" >/dev/null 2>&1;
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -276,8 +272,8 @@ ff()
     if   [[ "$key" == ctrl-o ]]; then open "$sel";
     elif [[ "$key" == ctrl-v ]]; then "$VISUAL" "$sel";
     elif [[ "$key" == ctrl-n ]]; then "$EDITOR" "$sel";
-    elif [[ "$key" == ctrl-e ]]; then if [[ -d "$sel" ]]; then xdg-open "$sel"; else xdg-open $(dirname "$sel"); fi
-    elif [[ "$key" == ctrl-y ]]; then copyabsolutepath $(printf "$sel");
+    elif [[ "$key" == ctrl-e ]]; then if [[ -d "$sel" ]]; then xdg-open "$sel"; else xdg-open "$(dirname "$sel")"; fi
+    elif [[ "$key" == ctrl-y ]]; then copyabsolutepath "$(printf "%s" "$sel")";
     elif [[ -d "$sel" ]] ; then cd "$sel"; else cd "$(dirname "$sel")";
     fi
 }
@@ -290,13 +286,13 @@ ff()
 
 fkill()
 {
-    local pid
+    local pid;
 
-    if [ "$UID" != "0" ]; then pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}');
-    else pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}');
+    if [ "$UID" != "0" ]; then pid="$(ps -f -u "$UID" | sed 1d | fzf -m | awk '{print "$2"}')";
+    else pid=$(ps -ef | sed 1d | fzf -m | awk '{print "$2"}');
     fi
 
-    if [ "x$pid" != "x" ]; then printf $pid | xargs kill -"${1:-9}"; fi
+    if [ "x$pid" != "x" ]; then printf "%s" "$pid" | xargs kill -"${1:-9}"; fi
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

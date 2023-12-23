@@ -92,7 +92,7 @@ add-zsh-hook precmd precmd_calculate_time_elapsed;
 
 is_in_git_submodule()
 {
-    [ ! -z "$(git rev-parse --show-superproject-working-tree 2>/dev/null)" ] && printf " [submodule]";
+    [ -n "$(git rev-parse --show-superproject-working-tree 2>/dev/null)" ] && printf " [submodule]";
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -112,7 +112,7 @@ show_cmd_duration()
 {
     # elapsed_time is calculated in precmd()
     # as trailing '\n' are trimmed, add a non-printing last char ('\r')
-    [ ! -z ${elapsed_time} ] && printf "(took %s)\n\r" "${elapsed_time}" || printf '\n\r';
+    [ -n "${elapsed_time}" ] && printf "(took %s)\n\r" "${elapsed_time}" || printf '\n\r';
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -121,7 +121,7 @@ show_cmd_duration()
 
 show_exit_symbol()
 {
-    [[ $LAST_EXIT_CODE -ne 0 ]] && printf " " || printf "  "
+    [ "$LAST_EXIT_CODE" -ne 0 ] && printf " " || printf "  ";
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -130,7 +130,7 @@ show_exit_symbol()
 
 show_git_branch()
 {
-    if git rev-parse --git-dir > /dev/null 2>&1; then
+    if command git rev-parse --git-dir > /dev/null 2>&1; then
         printf " %s" "$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')";
     fi;
 }
@@ -141,7 +141,7 @@ show_git_branch()
 
 show_git_stash()
 {
-    if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
+    if command git rev-parse --verify refs/stash >/dev/null 2>&1; then
         printf "  %s" "$(git stash list 2>/dev/null | wc -l)";
     fi
 }
@@ -150,7 +150,8 @@ show_git_stash()
 
 # Disable prompt mangling in venv/bin/activate and show the python venv name, if active, with a custom icon
 
-export VIRTUAL_ENV_DISABLE_PROMPT=1
+VIRTUAL_ENV_DISABLE_PROMPT=1;
+export VIRTUAL_ENV_DISABLE_PROMPT;
 
 show_python_venv()
 {
