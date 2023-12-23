@@ -21,7 +21,7 @@
 
 # Hooks
 
-# Some features require estimation inside preexec() & precmd()
+# Some prompt features require estimation inside preexec() & precmd()
 # - Calculate and save the elapsed time of the previous command
 # - Save exit codes of the previous command
 # - Load terminal title
@@ -144,7 +144,7 @@ show_python_venv()
 
 set_prompt()
 {
-    setopt PROMPT_SUBST # parameter expansion, command substitution and arithmetic expansion are performed in prompts
+    setopt PROMPT_SUBST; # parameter expansion, command substitution and arithmetic expansion are performed in prompts
 
     # Define consistent colours & styles that can be used to customize the prompt
     # Wrap tput output in %{ %} - helps zsh to ignore non-printable characters and correctly calculate the prompt size

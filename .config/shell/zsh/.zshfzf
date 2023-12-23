@@ -22,20 +22,20 @@ export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border=rounded --info=i
 # TODO: Implement Ctr-X to delete an entry from history
 fzf_history_widget()
 {
-    local selected
+    local selected;
     if selected=$(fc -rl 1 | awk '{$1="";print substr($0,2)}' |
                   fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' \
                       --header-first --header='↵:Paste' -q "$LBUFFER");
     then
-        LBUFFER=$selected
+        LBUFFER=$selected;
     fi
-    zle redisplay
+    zle redisplay;
 }
 
 # CTRL-R - bind to fzf_history_widget()
-autoload -U  fzf_history_widget
-zle      -N  fzf_history_widget
-bindkey '^R' fzf_history_widget
+autoload -U  fzf_history_widget;
+zle      -N  fzf_history_widget;
+bindkey '^R' fzf_history_widget;
 
 #╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 #║ CTRL-T - Fuzzy search files & directories                                                                           ║
@@ -73,8 +73,8 @@ fzf_file_widget()
 }
 
 # CTRL-T - bind to fzf_file_widget()
-autoload -U  fzf_file_widget
-zle      -N  fzf_file_widget
-bindkey '^T' fzf_file_widget
+autoload -U  fzf_file_widget;
+zle      -N  fzf_file_widget;
+bindkey '^T' fzf_file_widget;
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

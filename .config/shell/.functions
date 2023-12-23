@@ -202,7 +202,7 @@ copyabsolutepath() {
 
 glog()
 {
-    if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository. Exiting.\n"; return; fi;
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
 
     local out shas sha q k
     while out=$(git log --date=format:'%Y-%m-%d %a' --format=format:'%h  %ad  %<(16,trunc)%an  %>|(1)%s %d' "$@" |
@@ -227,7 +227,7 @@ glog()
 
 gco()
 {
-    if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository. Exiting.\n"; return; fi;
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
 
     (git branch --all && git tag && git log --all --pretty=format:"%h") | fzf | xargs git checkout;
 }
@@ -238,7 +238,7 @@ gco()
 
 ga()
 {
-    if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository. Exiting.\n"; return; fi;
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
 
     git diff --name-only --line-prefix="$(git rev-parse --show-toplevel)" | fzf | xargs git add -v;
 }
@@ -416,18 +416,21 @@ update_apt()
     sudo apt autoremove -y;
     sudo apt autoclean;
     sudo apt clean;
+
+    printf "Apt update finished.\n\n";
 }
 
 # update_flatpaks() - Run updates for Flatpak package manager
 update_flatpaks()
 {
     if ! __has flatpak; then return 1; fi
-	
+
 	printf "Checking for available Flatpak updates...\n";
     flatpak remote-ls --updates;
 
     printf '\n';
 
+    # TODO: Execute this step only if there are Flatpaks available for update
     if ! confirm 'Start Flatpak update ? [y/N]'; then printf "Flatpak update cancelled.\n\n"; return 1; fi
 
     printf "\nStarting Flatpak update...\n";
@@ -437,24 +440,25 @@ update_flatpaks()
     flatpak uninstall --delete-data -y;
     flatpak uninstall --unused -y;
 
-    printf "Flatpak update finished.\n";
+    printf "Flatpak update finished.\n\n";
 }
 
 # update_snaps() - Run updates for Snap package manager
 update_snaps()
 {
     if ! __has snap; then return 1; fi
-	
+
 	printf "Checking for available Snap updates...\n";
 	sudo snap refresh --list
 
     printf '\n';
 
+    # TODO: Execute this step only if there are Snaps available for update
     if ! confirm 'Start Snap update ? [y/N]'; then printf "Snap update cancelled.\n\n"; return 1; fi
 
     printf "\nStarting Snap update...\n";
     sudo snap refresh;
-    printf "Snap update finished.\n";
+    printf "Snap update finished.\n\n";
 }
 
 # do_update() - Identify the distro-specific package manager and run system updates and cleanup
