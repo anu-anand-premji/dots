@@ -25,7 +25,7 @@ fzf_history_widget()
     local selected;
     if selected=$(fc -rl 1 | awk '{$1="";print substr($0,2)}' |
                   fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' \
-                      --header-first --header='↵:Paste' -q "$LBUFFER");
+                      --header-first --header='↵:Paste' --border-label="| Search Shell History |" -q "$LBUFFER");
     then
         LBUFFER=$selected;
     fi
@@ -55,6 +55,7 @@ fzf_file_widget()
     entries=("$(fd -I --full-path --hidden --exclude ".git" --color=never . / |                                 \
                 fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --exit-0  \
                     --expect=ctrl-o,ctrl-v,ctrl-n,ctrl-y,ctrl-e --header-first                                  \
+                    --border-label="| Find Files & Directories |"                                               \
                     --header='↵:Paste | ^E: File Explorer | ^V: $VISUAL | ^N: $EDITOR | ^O: System App | ^Y: Copy')");
 
     key="$(head -1 <<< "${entries[@]}")";

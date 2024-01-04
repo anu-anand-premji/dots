@@ -376,11 +376,11 @@ tre()
 
 # Dependencies: confirm()
 
-# TODO
 # update_dnf() - Run updates for DNF package manager
 
 update_dnf()
 {
+    # TODO:
     return 0;
 }
 
