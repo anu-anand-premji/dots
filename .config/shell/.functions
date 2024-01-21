@@ -211,7 +211,9 @@ glog()
 
     local out shas sha q k
     while out=$(git log --date=format:'%Y-%m-%d %a' --format=format:'%h  %ad  %<(16,trunc)%an  %>|(1)%s %d' "$@" |
-                fzf --no-sort --no-info --query="$q" --print-query --expect=ctrl-d,ctrl-y,ctrl-h  \
+                fzf --no-sort --no-info --query="$q" --print-query --expect=ctrl-d,ctrl-y,ctrl-h      \
+                    --border-label=" Search Git commits on the current branch " --border-label-pos=2  \
+                    --color 'label:yellow:bold'                                                       \
                     --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' \
                     --header-first --header='↵: Show | ^D: Diff | ^Y: Copy Hash | ^H: Checkout'); do
         q=$(head -1 <<< "$out");
@@ -234,7 +236,10 @@ gco()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
 
-    (git branch --all && git tag && git log --all --pretty=format:"%h") | fzf | xargs git checkout;
+    (git branch --all && git tag && git log --all --pretty=format:"%h") |
+     fzf --border-label=" Git checkout branch/tag/commit across all remotes " --border-label-pos=2 \
+         --color 'label:yellow:bold' |
+     xargs git checkout;
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -245,7 +250,9 @@ ga()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
 
-    git diff --name-only --line-prefix="$(git rev-parse --show-toplevel)" | fzf | xargs git add -v;
+    git diff --name-only --line-prefix="$(git rev-parse --show-toplevel)" |
+    fzf --border-label=" Stage modified files (git add) " --border-label-pos=2 --color 'label:yellow:bold' |
+    xargs git add -v;
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
@@ -267,9 +274,10 @@ ga()
 ff()
 {
     # entries=("$(locate ${1:-~} |                                                                               \
-    entries=("$(fd -I --full-path --hidden --exclude ".git" --color=never . ${1:-~} |                          \
-                fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --exit-0 \
-                    --expect=ctrl-o,ctrl-v,ctrl-n,ctrl-y,ctrl-e --header-first                                 \
+    entries=("$(fd -I --full-path --hidden --exclude ".git" --color=never . ${1:-~} |                             \
+                fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --exit-0    \
+                    --border-label=" Find Files & Directories " --border-label-pos=2  --color 'label:yellow:bold' \
+                    --expect=ctrl-o,ctrl-v,ctrl-n,ctrl-y,ctrl-e --header-first                                    \
                     --header='↵:cd | ^E: File Explorer | ^V: $VISUAL | ^N: $EDITOR | ^O: System App | ^Y: Copy')");
 
     key="$(head -1 <<< "${entries[@]}")";
@@ -290,15 +298,21 @@ ff()
 
 # Dependencies: fzf, sed, awk
 
-fkill()
-{
-    local pid;
+fkill() {
+   local pid fzf_kill;
 
-    if [ "$UID" != "0" ]; then pid="$(ps -f -u "$UID" | sed 1d | fzf -m | awk '{print "$2"}')";
-    else pid=$(ps -ef | sed 1d | fzf -m | awk '{print "$2"}');
-    fi
+   pid=""
+   fzf_kill='fzf -m --border-label=" Find and Kill a Process " --border-label-pos=2 --color="label:yellow:bold"';
 
-    if [ "x$pid" != "x" ]; then printf "%s" "$pid" | xargs kill -"${1:-9}"; fi
+   if [ "$UID" != "0" ]; then
+       pid="$(ps -f -u "$UID" | sed 1d | eval "$fzf_kill" | awk "{print \$2}")"
+   else
+       pid=$(ps -ef | sed 1d | eval "$fzf_kill" | awk "{print \$2}")
+   fi
+
+   if [ "x$pid" != "x" ]; then
+       printf "%s" "$pid" | xargs kill -"${1:-9}"
+   fi
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #

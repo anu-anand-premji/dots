@@ -24,8 +24,9 @@ fzf_history_widget()
 {
     local selected;
     if selected=$(fc -rl 1 | awk '{$1="";print substr($0,2)}' |
-                  fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' \
-                      --header-first --header='↵:Paste' --border-label="| Search Shell History |" -q "$LBUFFER");
+                  fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'         \
+                      --border-label=" Search Shell History " --border-label-pos=2  --color 'label:yellow:bold' \
+                      --header-first --header='↵:Paste' -q "$LBUFFER");
     then
         LBUFFER=$selected;
     fi
@@ -52,10 +53,10 @@ bindkey '^R' fzf_history_widget;
 
 fzf_file_widget()
 {
-    entries=("$(fd -I --full-path --hidden --exclude ".git" --color=never . / |                                 \
-                fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --exit-0  \
-                    --expect=ctrl-o,ctrl-v,ctrl-n,ctrl-y,ctrl-e --header-first                                  \
-                    --border-label="| Find Files & Directories |"                                               \
+    entries=("$(fd -I --full-path --hidden --exclude ".git" --color=never . / |                                   \
+                fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --exit-0    \
+                    --expect=ctrl-o,ctrl-v,ctrl-n,ctrl-y,ctrl-e --header-first                                    \
+                    --border-label=" Find Files & Directories " --border-label-pos=2  --color 'label:yellow:bold' \
                     --header='↵:Paste | ^E: File Explorer | ^V: $VISUAL | ^N: $EDITOR | ^O: System App | ^Y: Copy')");
 
     key="$(head -1 <<< "${entries[@]}")";
