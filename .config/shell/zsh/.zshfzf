@@ -62,13 +62,35 @@ fzf_file_widget()
     key="$(head -1 <<< "${entries[@]}")";
     sel="$(head -2 <<< "${entries[@]}" | tail -1)" || return;
 
-    if   [[ "$key" == ctrl-o ]]; then open "$sel";
+    if   [[ "$key" == ctrl-o ]]; then
+        case "$(uname)" in
+            Darwin) open "$sel" ;;
+            Linux) xdg-open "$sel" ;;
+        esac;
+
     elif [[ "$key" == ctrl-v ]]; then "$VISUAL" "$sel";
+
     elif [[ "$key" == ctrl-n ]]; then "$EDITOR" "$sel";
-    elif [[ "$key" == ctrl-e ]]; then if [[ -d "$sel" ]]; then xdg-open "$sel"; else xdg-open $(dirname "$sel"); fi
+
+    elif [[ "$key" == ctrl-e ]]; then
+        if [[ -d "$sel" ]]; then
+            case "$(uname)" in
+                Darwin) open "$sel" ;;
+                Linux) xdg-open "$sel" ;;
+            esac;
+        else
+            case "$(uname)" in
+                Darwin) open "$(dirname "$sel")" ;;
+                Linux) xdg-open "$(dirname "$sel")" ;;
+            esac;
+        fi
+
     elif [[ "$key" == ctrl-y ]]; then printf "$sel" | clipcopy;
+
     else LBUFFER="${LBUFFER}$sel";
+
     fi
+
     local ret=$?;
     zle reset-prompt;
     return $ret;
