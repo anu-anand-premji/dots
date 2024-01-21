@@ -69,7 +69,7 @@ alias rerc='exec "$(ps -p $$ -ocomm=)"';
 
 # Switch Python between python2 & python3 using update-alternatives
 
-alias switchpython='sudo update-alternatives --config python'
+alias switchpython='sudo update-alternatives --config python';
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
@@ -87,7 +87,7 @@ alias sysinfo='sudo inxi -v 3';
 
 # Git
 
-alias g='git'
+alias g='git';
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 

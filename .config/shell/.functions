@@ -196,7 +196,7 @@ copyabsolutepath() {
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# glog() - Fuzzy search git commits on the current branch and then press:
+# glog() - Fuzzy search Git commits on the current branch and then press:
 #          - ENTER  - git show (what changed in that commit)
 #          - CTRL-D - git diff (between that commit and ^HEAD)
 #          - CTRL-Y - copy the commit id
@@ -209,7 +209,7 @@ glog()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
 
-    local out shas sha q k
+    local out shas sha q k;
     while out=$(git log --date=format:'%Y-%m-%d %a' --format=format:'%h  %ad  %<(16,trunc)%an  %>|(1)%s %d' "$@" |
                 fzf --no-sort --no-info --query="$q" --print-query --expect=ctrl-d,ctrl-y,ctrl-h      \
                     --border-label=" Search Git commits on the current branch " --border-label-pos=2  \
@@ -219,7 +219,7 @@ glog()
         q=$(head -1 <<< "$out");
         k=$(head -2 <<< "$out" | tail -1);
         shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}');
-        [ -z "$shas" ] && continue
+        [ -z "$shas" ] && continue;
         if   [ "$k" = ctrl-d ]; then git diff --color=always $shas;
         elif [ "$k" = ctrl-y ]; then (printf $shas | clipcopy) && (printf "$shas copied to clipboard.\n") || return 1;
         elif [ "$k" = ctrl-h ]; then git checkout $shas;
@@ -245,7 +245,7 @@ gco()
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # ga() - Fuzzy git add
-# TODO: FIX: Doesn't seem to work for files in the git root. Example README files
+# TODO: FIX: Doesn't seem to work for files in the git root directory. Example README files
 ga()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
@@ -394,7 +394,7 @@ tre()
 
 update_dnf()
 {
-    # TODO:
+    # TODO: Run updates for DNF package manager
     return 0;
 }
 
@@ -471,10 +471,11 @@ update_snaps()
 do_update()
 {
     printf "\nStarting system update...\n";
-    update_apt; # TODO: check OS and call the correct package manager here
-	update_dnf; # TODO: check OS and call the correct package manager here
-    update_flatpaks;
-    update_snaps;
+
+    if _has apt-get; then update_apt;      fi ;
+    if _has dnf;     then update_dnf;      fi ;
+    if _has flatpak; then update_flatpaks; fi ;
+    if _has snap;    then update_snaps;    fi ;
 
     printf "Done. It's good practice to do a system reboot now.\n"
 }

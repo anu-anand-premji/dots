@@ -15,15 +15,16 @@ compinit -d "$XDG_CACHE_HOME/.zcompdump"; # compsys is now online with a custom 
 
 zmodload -i zsh/complist;  # module that defines some widgets like menu-select
 
-setopt auto_menu;          # show completion menu on a successive tab press
-setopt menu_complete;      # auto select the first completion entry
-setopt hash_list_all;      # hash everything before completion to avoid false reports of spelling errors
-setopt completealiases;    # auto complete aliases
 setopt always_to_end;      # when completing from the middle of a word, move the cursor to the end of the word
-setopt complete_in_word;   # allow completion from within a word/phrase and is needed for the prefix completer
-setopt list_ambiguous;     # complete as much of a completion until it gets ambiguous
-setopt auto_remove_slash;  # remove slash from the end if the next typed character is a word delimiter
+setopt auto_menu;          # show completion menu on a successive tab press
 setopt auto_param_slash;   # if completed parameter is a directory, add a trailing slash
+setopt auto_remove_slash;  # remove slash from the end if the next typed character is a word delimiter
+setopt complete_in_word;   # allow completion from within a word/phrase and is needed for the prefix completer
+setopt completealiases;    # auto complete aliases
+setopt hash_list_all;      # hash everything before completion to avoid false reports of spelling errors
+setopt list_ambiguous;     # complete as much of a completion until it gets ambiguous
+setopt list_packed;        # completion list uses less lines by printing the matches in columns with different widths
+setopt menu_complete;      # auto select the first completion entry
 setopt no_correct;         # disable spelling correction for commands
 setopt no_list_beep;       # no bell on ambiguous completion
 
@@ -115,11 +116,11 @@ setopt noflowcontrol;           # disable flow control for ZSH
 #╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 setopt interactivecomments;     # allow comments in shell and stop interpreting them
-setopt no_print_exit_value;     # do not print return value if non-zero
 setopt no_beep;                 # no bell on error
 setopt no_bg_nice;              # no lower priority for background jobs
 setopt no_hup;                  # no hup signal at shell exit
 setopt no_ignore_eof;           # do not exit on end-of-file
+setopt no_print_exit_value;     # do not print return value if non-zero
 setopt no_rm_star_silent;       # ask for confirmation for `rm *' or `rm path/*'
 
 #╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
