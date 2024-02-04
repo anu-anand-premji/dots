@@ -47,7 +47,7 @@ if [ -d "$DOTFILE_DIR/../../../../Backup" ]; then HISTFILE="$DOTFILE_DIR/../../.
 
 HISTSIZE=1000000000      # number of entries from the history file to be kept in memory for the current session
 HISTFILESIZE=1000000000  # number of entries that are stored in the history file
-HISTCONTROL=ignoreboth   # don't put duplicate lines or lines starting with space in the history
+HISTCONTROL=ignoreboth:erasedups   # ignore and erase duplicate lines and lines starting with space in the history
 
 shopt -s histappend      # append to the history file, don't overwrite it
 
