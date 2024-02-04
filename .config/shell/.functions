@@ -245,7 +245,7 @@ gco()
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # ga() - Fuzzy git add
-# TODO: FIX: Doesn't seem to work for files in the git root directory. Example README files
+
 ga()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
