@@ -250,7 +250,7 @@ ga()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
 
-    git diff --name-only --line-prefix="$(git rev-parse --show-toplevel)" |
+    git diff --name-only --line-prefix="$(git rev-parse --show-toplevel)//" |
     fzf --border-label=" Stage modified files (git add) " --border-label-pos=2 --color 'label:yellow:bold' |
     xargs git add -v;
 }
