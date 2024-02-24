@@ -31,6 +31,7 @@
     # On GNOME
     pager  = LESS=-R delta --features "$(case "$(gsettings get org.gnome.desktop.interface gtk-theme)" in *"dark"*) echo "dark-theme" ;; *) echo "light-theme" ;; esac)"
     # On MacOS
+    # TODO: combine this into one function that can handle both Linux & MacOS
     # pager = delta --features "$(defaults read -globalDomain AppleInterfaceStyle > /dev/null 2>&1 && echo "dark-theme" || echo "light-theme")"
 
 [delta "dark-theme"]
