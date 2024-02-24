@@ -113,5 +113,9 @@
     whitespace-error-style                             = "#aaaaaa"
     zero-style                                         = syntax
 
+# Use separate file for username / github token / etc
+[include]
+	path = ~/.gitconfig.local
+
 [merge]
     conflictstyle = diff3
