@@ -306,6 +306,35 @@ ff()
     fi
 }
 
+# TODO: Colour the DIR and FILE tags in blue
+_ff()
+{
+    local dirs files entries key sel;
+
+    # List directories and prepend "DIR" to each item in the list
+    dirs=$(fd -I --type d --full-path --hidden --exclude ".git" . ${1:-~} | sed 's/^/DIR  /' );
+
+    # List files and prepend "FILE" to each item in the list
+    files=$(fd -I --type f --full-path --hidden --exclude ".git" . ${1:-~} | sed 's/^/FILE /' );
+
+    entries="$((echo "$dirs"; echo "$files") | \
+                fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --exit-0 \
+                    --border-label=" Find Files & Directories " --border-label-pos=2 --ansi --color label:yellow:bold \
+                    --expect=ctrl-o,ctrl-v,ctrl-n,ctrl-y,ctrl-e --header-first \
+                    --header='↵:cd | ^E: File Explorer | ^V: $VISUAL | ^N: $EDITOR | ^O: System App | ^Y: Copy')";
+
+    key="$(head -1 <<< "${entries[@]}")";
+    sel="$(head -2 <<< "${entries[@]}" | tail -1 | sed 's/^.\{5\}//')";
+
+    if   [[ "$key" == ctrl-o ]]; then open_command "$sel";
+    elif [[ "$key" == ctrl-v ]]; then "$VISUAL" "$sel";
+    elif [[ "$key" == ctrl-n ]]; then "$EDITOR" "$sel";
+    elif [[ "$key" == ctrl-e ]]; then open_path "$sel";
+    elif [[ "$key" == ctrl-y ]]; then copyabsolutepath "$(printf "%s" "$sel")";
+    elif [[ -d "$sel" ]] ;       then cd "$sel"; else cd "$(dirname "$sel")";
+    fi
+}
+
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
 # fkill() - Fuzzy find a process and kill it
