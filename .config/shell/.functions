@@ -15,7 +15,7 @@
 #║ detect_clipboard() - Defines two clipboard functions, clipcopy() and clippaste(), based on the detected platform    ║
 #║ copyabsolutepath() - Copy the absolute path of a given directory/file ($PWD if no parameter given) to the clipboard ║
 #║ glog()             - Fuzzy search git commits on the current branch                                                 ║
-#║ gco()              - Fuzzy git checkout branch/tag/commit across all remotes                                        ║
+#║ gco()              - Fuzzy git checkout a branch or a tag across all remotes                                        ║
 #║ ga()               - Fuzzy git add                                                                                  ║
 #║ ff()               - Fuzzy find a file or directory                                                                 ║
 #║ fkill()            - Fuzzy find a process and kill it                                                               ║
@@ -230,16 +230,26 @@ glog()
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# gco() - Fuzzy git checkout branch/tag/commit across all remotes
+# gco() - Fuzzy git checkout a branch or a tag across all remotes
+
+# Dependencies: git, fzf, awk, sed
 
 gco()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
 
-    (git branch --all && git tag && git log --all --pretty=format:"%h") |
-     fzf --border-label=" Git checkout branch/tag/commit across all remotes " --border-label-pos=2 \
-         --color 'label:yellow:bold' |
-     xargs git checkout;
+    local tags branches target;
+
+    branches=$(git --no-pager branch --all --format="%1B[0;34;1mbranch%09%1B[m%(refname:short)" | sed '/^$/d') || return;
+
+    tags=$(git --no-pager tag | awk '{print "\x1b[35;1mtag\x1b[m\t" $1}') || return;
+
+    target=$((echo "$branches"; echo "$tags") | \
+              fzf --border-label=" Git checkout a branch or a tag across all remotes " \
+                  --border-label-pos=2 --ansi --color 'label:yellow:bold') \
+            || return;
+
+    git checkout "$(awk '{print $2}' <<< "$target")";
 }
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
