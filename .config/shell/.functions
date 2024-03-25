@@ -285,6 +285,8 @@ ga()
 
 ff()
 {
+    local entries key sel;
+
     # entries=("$(locate ${1:-~} |                                                                               \
     entries=("$(fd -I --full-path --hidden --exclude ".git" --color=never . ${1:-~} |                             \
                 fzf --preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --exit-0    \
