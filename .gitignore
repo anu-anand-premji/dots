@@ -2,7 +2,6 @@
 /.vs/
 /.vscode/
 /.idea/
-.config/git/config.local
 
 # Build/deps dir
 /build/
