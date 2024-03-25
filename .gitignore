@@ -2,7 +2,7 @@
 /.vs/
 /.vscode/
 /.idea/
-config/nvim/plugged
+.config/git/config.local
 
 # Build/deps dir
 /build/
