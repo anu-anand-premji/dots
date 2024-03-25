@@ -386,7 +386,7 @@ cdgr()
 # gh from a repo opens it. Works with github, gitlab, etc...
 # gh <remote> opens the remote. For eg, gh upstream.
 
-# Dependencies: git, sed
+# Dependencies: git, sed, open_command()
 
 gh()
 {(
@@ -397,7 +397,7 @@ gh()
 
     URL=$(git config remote."$remote".url | sed "s/git@\(.*\):\(.*\).git/https:\/\/\1\/\2/");
     printf "Opening %s\n" "$URL";
-    open "$URL" >/dev/null;
+    open_command "$URL" >/dev/null;
 )}
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
