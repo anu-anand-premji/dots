@@ -256,6 +256,8 @@ gco()
 
 # ga() - Fuzzy git add
 
+# Dependencies: git, fzf, xargs
+
 ga()
 {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then printf "Not inside a Git repository.\n"; return; fi;
