@@ -74,7 +74,7 @@ confirm()
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# open_command() - Open the given dir/file in the default system across Linux, MacOS or WSL
+# open_command() - Open the given dir/file/link in the default system app across Linux, MacOS or WSL
 
 open_command()
 {
