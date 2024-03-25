@@ -19,7 +19,9 @@ export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border=rounded --info=i
 
 # Fuzzy search history and then paste the selected entry
 # For truncated entries, use ? key to toggle a preview window
+
 # TODO: Implement Ctr-X to delete an entry from history
+
 fzf_history_widget()
 {
     local selected;
