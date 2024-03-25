@@ -19,7 +19,7 @@
 #║ ga()               - Fuzzy git add                                                                                  ║
 #║ ff()               - Fuzzy find a file or directory                                                                 ║
 #║ fkill()            - Fuzzy find a process and kill it                                                               ║
-#║ cdrr()             - cd to the outermost git repository directory                                                   ║
+#║ cdgr()             - cd to the outermost git repository directory                                                   ║
 #║ gh()               - Open GitHub page of a repository from the terminal                                             ║
 #║ od()               - Run a command, disown the process and then return to prompt without terminating the command    ║
 #║ tre()              - Better `tree` with colors, .git exclusion, hidden files                                        ║
@@ -317,9 +317,9 @@ fkill() {
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# cdrr() - cd to the outermost git repository directory
+# cdgr() - cd to the outermost git repository directory
 
-cdrr()
+cdgr()
 {
     local gitroot;
     gitroot="$(git rev-parse --show-toplevel)";
