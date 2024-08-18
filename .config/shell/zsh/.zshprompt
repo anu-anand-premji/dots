@@ -155,7 +155,7 @@ export VIRTUAL_ENV_DISABLE_PROMPT;
 
 show_python_venv()
 {
-    if [[ -v VIRTUAL_ENV ]]; then
+    if [[ -n $VIRTUAL_ENV ]]; then
         printf " %s\n\r" "${VIRTUAL_ENV##*/}"; # as trailing '\n' are trimmed, add a non-printing last char ('\r')
     fi
 }
@@ -199,7 +199,7 @@ set_prompt()
     PS1='${bold}$(prompt_color)$(show_exit_symbol)${reset}'    # show  or  based on the exit code of last command
     PS1+='${bold}$(prompt_color)$(show_cmd_duration)${reset}'; # show previous command duration in an appropriate unit
     PS1+=$'\n';                                                # newline
-    PS1+='${bold}${green}$(show_python_venv)${reset}';         # python venv
+    PS1+='${bold}${olive}$(show_python_venv)${reset}';         # python venv
     PS1+='${bold}${reset}${username}${reset}';                 # username (%n)
     PS1+='${bold}${yellow}@${reset}';                          # @
     PS1+='${bold}${reset}${hostname}${reset}';                 # hostname (%m)
