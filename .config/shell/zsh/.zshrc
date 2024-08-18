@@ -168,9 +168,14 @@ bindkey -r        '^S';               # Disable CTRL-S from triggering forward-i
 #║ Extras                                                                                                              ║
 #╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Load custom prompt, aliases, fzf key-binds, and other functions
+# Load custom prompt - use starship if available, else use the custom defined prompt
+if command -v starship >/dev/null 2>&1; then
+    export STARSHIP_CONFIG="$ZDOTDIR/../starship_agnoster_gaps.toml" && eval "$(starship init zsh)";
+else
+    source "$ZDOTDIR/.zshprompt";
+fi
 
-source "$ZDOTDIR/.zshprompt";
+# Load aliases, fzf key-binds, and other functions
 source "$ZDOTDIR/.zshfzf";
 source "$ZDOTDIR/../.functions";
 source "$ZDOTDIR/../.aliases";

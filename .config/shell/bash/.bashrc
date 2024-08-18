@@ -102,9 +102,14 @@ bind -r "\C-s"                         # Disable CTRL-S from trigering forward-i
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# Load custom prompt, aliases and functions
+# Load custom prompt - use starship if available, else use the custom defined prompt
+if command -v starship >/dev/null 2>&1; then
+    export STARSHIP_CONFIG="$DOTFILE_DIR/../starship_agnoster_gaps.toml" && eval "$(starship init bash)";
+else
+    source "$DOTFILE_DIR/.bashprompt";
+fi
 
-source "$DOTFILE_DIR/.bashprompt";
+# Load aliases, fzf key-binds, and other functions
 source "$DOTFILE_DIR/.bashfzf";
 source "$DOTFILE_DIR/../.functions";
 source "$DOTFILE_DIR/../.aliases";
