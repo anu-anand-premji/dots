@@ -38,6 +38,7 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}         # use colors in li
 #╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 setopt auto_cd;            # if the command is a path, cd into it
+setopt autopushd           # push cd to stack automatically
 setopt chase_links;        # resolve symlinks
 setopt extended_glob;      # consider `#', `~' and `^' characters as part of patterns for filename generation
 setopt glob_dots;          # include dotfiles in globbing
