@@ -35,7 +35,7 @@ fzf_history_widget()
     zle redisplay;
 }
 
-# CTRL-R - bind to fzf_history_widget()
+# Bind CTRL-R to fzf_history_widget()
 autoload -U  fzf_history_widget;
 zle      -N  fzf_history_widget;
 bindkey '^R' fzf_history_widget;
@@ -98,7 +98,7 @@ fzf_file_widget()
     return $ret;
 }
 
-# CTRL-T - bind to fzf_file_widget()
+# Bind CTRL-T to fzf_file_widget()
 autoload -U  fzf_file_widget;
 zle      -N  fzf_file_widget;
 bindkey '^T' fzf_file_widget;
