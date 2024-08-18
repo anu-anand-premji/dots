@@ -31,6 +31,7 @@ setopt no_list_beep;       # no bell on ambiguous completion
 zstyle ':completion:*' verbose yes;                           # use verbose mode for completion
 zstyle ':completion:*' menu select=2;                         # menu selection with 2 candidates or more
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'; # case insensitive completion
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}         # use colors in lists during completion
 
 #╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
 #║ Directory                                                                                                           ║
