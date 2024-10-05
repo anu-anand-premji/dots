@@ -29,11 +29,11 @@ alias ..........='cd ../../../../..';
 
 # ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ #
 
-# Better ls with exa
+# Better ls with eza
 
-if _has exa; then
-    alias l='exa --oneline --all --group-directories-first --icons --sort=name --long --header --no-user';
-    alias ls='exa --all --group-directories-first --icons';
+if _has eza; then
+    alias l='eza --oneline --all --group-directories-first --icons --sort=name --long --header --no-user';
+    alias ls='eza --all --group-directories-first --icons';
 else
     alias l='ls -lAFh --color=always --group-directories-first';
     alias ls='ls -AFh --color=always --group-directories-first';
