@@ -102,8 +102,11 @@ alias dpsl='docker ps --format '{{.Names}}' --filter status=running';
 # Open ToDo list in the default $EDITOR
 alias todo='"$EDITOR" "$DOTFILE_DIR/../../../../Notes/todo.md"';
 
-# Edit shell config folder in the default $VISUAL editor
+# Edit the shell config folder in the default $VISUAL editor
 alias edrc='"$VISUAL" "$DOTFILE_DIR/../"';
+
+# cd into the shell config folder in the default $VISUAL editor
+alias cdrc='cd "$DOTFILE_DIR/../"';
 
 # Diff on-disk dotfiles vs dotfiles repo in Meld
 alias diffrc='od meld "$DOTFILE_DIR/../../../../dotfiles" "$HOME/repo/dots"';
