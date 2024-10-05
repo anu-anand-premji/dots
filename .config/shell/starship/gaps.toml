@@ -6,6 +6,7 @@ $os\
 $username\
 $directory\
 $git_branch\
+$git_commit\
 $git_status\
 $python\
 $docker_context\
@@ -51,6 +52,11 @@ symbol = ""
 style = "bg:cyan bold fg:#ffffff"
 format = '[](fg:cyan)[ $symbol $branch ]($style)'
 
+[git_commit]
+format = '[($hash$tag)]($style)'
+style = "bg:cyan bold fg:#ffffff"
+only_detached = true
+
 [git_status]
 style = "bg:cyan bold fg:#ffffff"
 format = '[ $stashed]($style)[](fg:cyan)'
@@ -58,12 +64,17 @@ format = '[ $stashed]($style)[](fg:cyan)'
 [python]
 symbol = "  "
 style = "bg:#4c566a bold fg:#ffffff"
-format = '[](fg:#4c566a)[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)[](fg:4c566a)'
+format = '[](fg:#4c566a)[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)[](fg:#4c566a)'
 
 [docker_context]
 symbol = " "
 style = "bg:#5e81ac"
-format = '[ $symbol $context ]($style) $path'
+format = '[](fg:#4c566a)[ $symbol $context ]($style) $path [](fg:4c566a)'
+
+[c]
+symbol = " "
+style = "bg:#4c566a bold fg:#ffffff"
+format = '[](fg:#4c566a)[ $symbol ($version) ]($style)[](fg:#4c566a)'
 
 [rust]
 symbol = ""
@@ -82,5 +93,5 @@ error_symbol = '[❯](bold red)'
 #style = "bg:#6272a4"
 
 [cmd_duration]
-min_time = 7 # Milliseconds
+min_time = 1000 # Milliseconds
 format = "Took [$duration](#6272a4)\n\n"
