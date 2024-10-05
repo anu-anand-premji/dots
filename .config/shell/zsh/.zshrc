@@ -170,7 +170,7 @@ bindkey -r        '^S';               # Disable CTRL-S from triggering forward-i
 
 # Load custom prompt - use starship if available, else use the custom defined prompt
 if command -v starship >/dev/null 2>&1; then
-    export STARSHIP_CONFIG="$ZDOTDIR/../starship_agnoster_gaps.toml" && eval "$(starship init zsh)";
+    export STARSHIP_CONFIG="$ZDOTDIR/../starship/gaps.toml" && eval "$(starship init zsh)";
 else
     source "$ZDOTDIR/.zshprompt";
 fi
