@@ -16,11 +16,12 @@ TODO:
 │   ├── .bashprompt -----------------------> Custom plugin-free BASH prompt
 │   └── .bashrc ---------------------------> BASH configuration file
 │
-├── scripts ------------------------------->
-│   └── doupdate -------------------------->
+├── scripts -------------------------------> Contains various scripts
+│   └── convert_gpg_key_format ------------> Convert GPG keys to the new format required by the APT package manager
 │
 ├── starship ------------------------------> Directory containing the settings for starship prompt
-│   └── agnoster_gaps.toml ----------------> Starship theme based on the original agnoster theme with gaps
+│   └── gaps.toml -------------------------> Starship theme based on the original agnoster theme with gaps
+│   └── pills.toml ------------------------> Starship theme with pill shaped segments
 │
 ├── zsh -----------------------------------> Directory containing ZSH settings & a custom plugin-free ZSH prompt
 │   ├── .zshenv ---------------------------> Sets ZDOTDIR and other global ZSH defaults
