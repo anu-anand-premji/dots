@@ -434,11 +434,13 @@ tre()
 # Dependencies: confirm()
 
 # update_dnf() - Run updates for DNF package manager
-
 update_dnf()
 {
-    # TODO: Run updates for DNF package manager
-    return 0;
+    if ! __has dnf; then return 1; fi
+
+    printf "Checking for available DNF updates...\n";
+    sudo dnf upgrade;
+    printf "DNF update finished.\n\n";
 }
 
 # update_apt() - Run updates for APT package manager
@@ -446,7 +448,7 @@ update_apt()
 {
     if ! __has apt-get; then return 1; fi
 
-    printf "Checking for available Apt updates...\n";
+    printf "Checking for available APT updates...\n";
     sudo apt update -qq;
     sudo apt-get -s dist-upgrade | awk '/^Inst/ { print $2 }';
 
@@ -466,7 +468,7 @@ update_apt()
     sudo apt autoclean;
     sudo apt clean;
 
-    printf "Apt update finished.\n\n";
+    printf "APT update finished.\n\n";
 }
 
 # update_flatpaks() - Run updates for Flatpak package manager
@@ -488,6 +490,7 @@ update_flatpaks()
     printf "Doing Flatpak clean-up...\n";
     flatpak uninstall --delete-data -y;
     flatpak uninstall --unused -y;
+    flatpack clean;
 
     printf "Flatpak update finished.\n\n";
 }
